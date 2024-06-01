@@ -8,7 +8,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 import ContextProvider from "./ContextProvider";
-import { MantineProvider, createTheme, Button, Anchor, TextInput, PasswordInput, Radio, Paper, Divider } from "@mantine/core";
+import { MantineProvider, virtualColor, createTheme, Button, Text, Anchor, TextInput, PasswordInput, Radio, Paper, Divider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { DatesProvider } from "@mantine/dates";
 import { useUser } from "./Context";
@@ -41,14 +41,45 @@ import Register from "./routes/Register"
 import ReportDetails from "./routes/ReportDetails"
 
 const darkTheme = createTheme({
+  colorScheme: 'dark',
+  colors: {
+    primary: [
+      '#324795',
+      '#324795',
+      '#324795',
+      '#324795',
+      '#324795',
+      '#324795',
+      '#324795',
+      '#324795',
+      '#324795',
+      '#324795',
+    ],
+    secondary: [
+      '#ffffff',
+      '#ffffff',
+      '#ffffff',
+      '#ffffff',
+      '#ffffff',
+      '#ffffff',
+      '#ffffff',
+      '#ffffff',
+      '#ffffff',
+      '#ffffff',
+    ],
+  },
   components: {
-    Button: Button.extend({
+    Button: {
       defaultProps: {
-        radius: "md",
-        //color: "blue",
-        color: "#4DABF7",
+        radius: 'md',
+        color: 'primary',
       },
-    }),
+      variants: {
+        secondary: {
+          color: 'secondary',
+        },
+      },
+    },
     TextInput: TextInput.extend({
       defaultProps: {
         radius: "md",
@@ -68,7 +99,17 @@ const darkTheme = createTheme({
     Divider: Divider.extend({
       defaultProps: {
         color: "#fff"
-
+      },
+    }),
+    Text: Text.extend({
+      defaultProps: {
+        color: "#fff"
+      },
+    }),
+    Anchor: Anchor.extend({
+      defaultProps: {
+        component: 'a',
+        color: '#fff',
       },
     }),
     Paper: Paper.extend({
@@ -82,6 +123,34 @@ const darkTheme = createTheme({
   },
 });
 const lightTheme = createTheme({
+  black: "161616",
+  colorScheme: 'dark',
+  colors: {
+    primary: [
+      '#324795',
+      '#324795',
+      '#324795',
+      '#324795',
+      '#324795',
+      '#324795',
+      '#324795',
+      '#324795',
+      '#324795',
+      '#324795',
+    ],
+    secondary: [
+      '#000000',
+      '#000000',
+      '#000000',
+      '#000000',
+      '#000000',
+      '#000000',
+      '#000000',
+      '#000000',
+      '#000000',
+      '#000000',
+    ],
+  },
   components: {
     Button: Button.extend({
       defaultProps: {
@@ -112,7 +181,17 @@ const lightTheme = createTheme({
 
       },
     }),
-
+    Text: Text.extend({
+      defaultProps: {
+        color: "#000"
+      },
+    }),
+    Anchor: Anchor.extend({
+      defaultProps: {
+        component: 'a',
+        color: '#000',
+      },
+    }),
     Paper: Paper.extend({
       styles: (theme) => ({
         root: {
@@ -124,6 +203,7 @@ const lightTheme = createTheme({
     }),
   },
 });
+
 
 function Routes({ onThemeChange }) {
   const user = useUser()
@@ -237,7 +317,7 @@ function App() {
 
   function updateCss(activeTheme) {
     if (activeTheme == "dark") {
-      document.getElementsByTagName('html')[0].style.backgroundColor = "#161616";
+      /* document.getElementsByTagName('html')[0].style.backgroundColor = "#161616";
       document.getElementsByTagName('header')[0].style.backgroundColor = "#161616";
       document.getElementsByTagName('main')[0].style.backgroundColor = "#222222";
       document.getElementsByTagName('footer')[0].style.backgroundColor = "#222222";
@@ -245,7 +325,7 @@ function App() {
       document.getElementsByTagName('html')[0].style.backgroundColor = "#e9e9e9";
       document.getElementsByTagName('header')[0].style.backgroundColor = "#e9e9e9";
       document.getElementsByTagName('main')[0].style.backgroundColor = "#fefefe";
-      document.getElementsByTagName('footer')[0].style.backgroundColor = "#fefefe";
+      document.getElementsByTagName('footer')[0].style.backgroundColor = "#fefefe"; */
     }
   }
   useEffect(() => {

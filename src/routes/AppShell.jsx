@@ -1,7 +1,7 @@
 import "../css/AppShell.module.css"
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { useMantineColorScheme, Button, Group, Drawer, Burger, Stack, Avatar, Divider, Image, Center, Text, Tooltip, Anchor, rem, Title } from "@mantine/core"
+import { useMantineColorScheme, Button, Group, Drawer, Burger, Stack, Avatar, Divider, Image, Center, Text, Tooltip, Anchor, rem, useMantineTheme } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks"
 import { useUser, useSetUser } from "../Context"
 import Logout from "../tools/Logout"
@@ -21,12 +21,14 @@ import {
 } from "@tabler/icons-react"
 import { CATCH_PHRASE } from "../tools/Constants"
 
-import XPMElogo from "../assets/XPMElogo.png"
+import logo_docmaster from "../assets/docmaster.png"
+import logo_docmaster_light from "../assets/docmaster_inverted.png"
 import Parameters from "./Parameters"
 
 export default function AppShell({ onThemeChange }) {
-  const { setColorScheme, clearColorScheme } = useMantineColorScheme();
-
+  const theme = useMantineTheme();
+  const [ColorScheme, setColorScheme] = useState("dark")
+  console.log(theme.black)
   const user = useUser()
   const setUser = useSetUser()
   const navigate = useNavigate()
@@ -50,6 +52,8 @@ export default function AppShell({ onThemeChange }) {
 
   const handleThemeChange = (theme) => {
     onThemeChange(theme);
+    console.log(theme)
+    setColorScheme(theme)
   };
 
   return (
@@ -58,14 +62,14 @@ export default function AppShell({ onThemeChange }) {
         <Stack gap={0}>
           <Center mb="xl" mt="md">
             <Link to="/">
-              {/* <Image h={25} w="auto" fit="contain" src={XPMElogo} /> */}
+              <Image h={50} w="auto" fit="contain" src={theme.black == "#000" ? logo_docmaster : logo_docmaster_light} />
             </Link>
-            <Group grow>
-              <Button onClick={() => handleThemeChange('light')}>Light</Button>
-              <Button onClick={() => handleThemeChange('dark')}>Dark</Button>
-            </Group>
-            <Divider my="sm" mx="xl" />
           </Center>
+          <Group grow>
+            <Button onClick={() => handleThemeChange('light')}>Light</Button>
+            <Button onClick={() => handleThemeChange('dark')}>Dark</Button>
+          </Group>
+          <Divider my="sm" mx="xl" />
           {user.token ? (
             <Stack gap={0} ml="xs">
               <Avatar src={user.photo} variant="filled" radius="sm" size={55} color="black" mb="xs" />
@@ -93,7 +97,7 @@ export default function AppShell({ onThemeChange }) {
             </Stack>
           ) : (
             <>
-              <Button component={Link} to="register" onClick={close} variant="outline">
+              <Button component={Link} to="register" onClick={close}>
                 Inscription
               </Button>
               <Divider my="sm" mx="xl" />
@@ -120,6 +124,7 @@ export default function AppShell({ onThemeChange }) {
                           close();
                         }}
                         variant={activeTab === tab.link ? "light" : "subtle"}
+                        color="secondary"
                         leftSection={<tab.icon />}
                         radius="sm"
                         p="sm"
@@ -175,8 +180,7 @@ export default function AppShell({ onThemeChange }) {
       <header>
         <Group justify="space-between" mx="lg" my={8}>
           <Link to="/">
-            {/* <Image h={25} w="auto" fit="contain" src={XPMElogo} /> */}
-          </Link>
+            <Image h={35} w="auto" fit="contain" src={theme.black == "#000" ? logo_docmaster : logo_docmaster_light} />          </Link>
 
           <Burger opened={opened} onClick={toggle} aria-label="Toggle navigation" />
         </Group>
@@ -189,8 +193,8 @@ export default function AppShell({ onThemeChange }) {
       <footer>
         <Stack m="6%" mb="lg">
           <Group position="left" component={Link} to="/" gap="lg" wrap="nowrap">
-            {/* <Image h={30} w="auto" fit="contain" src={XPMElogo} alt="logo XPME" /> */}
-            <Text c="white" fz={16}>
+            <Image h={50} w="auto" fit="contain" src={theme.black == "#000" ? logo_docmaster : logo_docmaster_light} />
+            <Text fz={16}>
               {CATCH_PHRASE}
             </Text>
           </Group>
