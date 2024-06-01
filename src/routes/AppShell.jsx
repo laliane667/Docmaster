@@ -11,13 +11,13 @@ import {
   IconBriefcase,
   IconStar,
   IconSquarePlus,
-  IconBuilding,
+  IconSettings,
   IconListDetails,
   IconBrandInstagram,
   IconBrandLinkedin,
-  IconBrandYoutubeFilled,
+  IconList,
   IconBrandX,
-  IconBrandFacebookFilled,
+  IconVocabulary,
 } from "@tabler/icons-react"
 import { CATCH_PHRASE } from "../tools/Constants"
 
@@ -35,9 +35,9 @@ export default function AppShell({ onThemeChange }) {
 
   const tabs = [
     //{ link: "/", label: "Page d'acceuil", icon: IconHome },
-    { link: "offers", label: "Offres", icon: IconListDetails },
-    { link: "ongoingprojects", label: "Mes missions", icon: IconBriefcase },
-    { link: "mygrades", label: "Mes notes", icon: IconStar },
+    { link: "ongoingprojects", label: "Mes projets", icon: IconList },
+    { link: "offers", label: "Mes documentations", icon: IconVocabulary },
+    { link: "parameters", label: "Paramètres", icon: IconSettings },
     //{ link: "companies", label: "Entreprises", icon: IconBuilding },
   ]
   const companyTabs = [
@@ -161,9 +161,9 @@ export default function AppShell({ onThemeChange }) {
             </>
           ) : null}
 
-          <Button fullWidth color="grey" size="compact-sm" component={Link} to="parameters" onClick={close} variant="light" mt="xs">
+          {/* <Button fullWidth color="grey" size="compact-sm" component={Link} to="parameters" onClick={close} variant="light" mt="xs">
             Paramètres
-          </Button>
+          </Button> */}
           {user.token && (
             <Button fullWidth color="red" size="compact-sm" onClick={() => Logout(setUser, navigate)} variant="light" mt="xs">
               Déconnexion
@@ -248,15 +248,7 @@ export default function AppShell({ onThemeChange }) {
                   <IconBrandLinkedin />
                 </Button>
               </Tooltip>
-              <Tooltip
-                label="Bientôt"
-                color="gray.9"
-                transitionProps={{ transition: "pop", duration: 300 }}
-                events={{ hover: true, focus: true, touch: true }}>
-                <Button variant="filled" pr={6} pl={6} w={32} h={32} style={{ backgroundColor: "rgb(235 235 235)", border: 0 }}>
-                  <IconBrandYoutubeFilled style={{ color: "rgb(255 0 0)" }} />
-                </Button>
-              </Tooltip>
+
               <Tooltip
                 label="Bientôt"
                 color="gray.9"
@@ -264,15 +256,6 @@ export default function AppShell({ onThemeChange }) {
                 events={{ hover: true, focus: true, touch: true }}>
                 <Button variant="filled" pr={6} pl={6} w={32} h={32} style={{ backgroundColor: "rgb(0 0 0)", border: 0 }}>
                   <IconBrandX />
-                </Button>
-              </Tooltip>
-              <Tooltip
-                label="Bientôt"
-                color="gray.9"
-                transitionProps={{ transition: "pop", duration: 300 }}
-                events={{ hover: true, focus: true, touch: true }}>
-                <Button variant="filled" pr={6} pl={6} w={32} h={32} style={{ backgroundColor: "rgb(3 107 228)", border: 0 }}>
-                  <IconBrandFacebookFilled />
                 </Button>
               </Tooltip>
             </Group>

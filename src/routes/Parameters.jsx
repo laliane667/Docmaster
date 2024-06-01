@@ -11,9 +11,6 @@ export default function Parameters() {
           Mes paramètres
         </Title>
       </Card>
-      <Center my="lg">
-        <Pagination color="black" value={activePage} onChange={setPage} total={3} />
-      </Center>
     </Stack>
   )
 }

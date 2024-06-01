@@ -8,7 +8,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 import ContextProvider from "./ContextProvider";
-import { MantineProvider, createTheme, Button, TextInput, PasswordInput, Radio, Paper, Divider } from "@mantine/core";
+import { MantineProvider, createTheme, Button, Anchor, TextInput, PasswordInput, Radio, Paper, Divider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { DatesProvider } from "@mantine/dates";
 import { useUser } from "./Context";
@@ -45,8 +45,8 @@ const darkTheme = createTheme({
     Button: Button.extend({
       defaultProps: {
         radius: "md",
-        color: "blue",
-        //color: "#324795",
+        //color: "blue",
+        color: "#4DABF7",
       },
     }),
     TextInput: TextInput.extend({
@@ -87,7 +87,7 @@ const lightTheme = createTheme({
       defaultProps: {
         radius: "md",
         color: "blue",
-        //color: "#324795",
+        color: "#324795",
       },
     }),
     TextInput: TextInput.extend({

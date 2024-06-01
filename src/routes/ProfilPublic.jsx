@@ -37,22 +37,22 @@ export default function ProfilPublic() {
             <Text size="lg" weight={700}>
               {profil.role === "user" ? `${profil.firstName} ${profil.lastName}` : profil.name}
             </Text>
-            <Text size="sm" color="gray">
+            <Text size="sm">
               {profil.email}
             </Text>
           </Group>
           <Stack mt="md" gap="sm">
-            <Text size="sm" color="gray">
+            <Text size="sm">
               {profil.city}
             </Text>
           </Stack>
           <Stack mt="md" gap="sm">
-            <Text size="sm" color="gray">
+            <Text size="sm">
               {profil.description}
             </Text>
           </Stack>
           {profil._id === user.id && (
-            <Button variant="light" color="blue" fullWidth onClick={() => navigate(`/profil/edit`)} style={{ marginTop: rem(20) }}>
+            <Button variant="light" fullWidth onClick={() => navigate(`/profil/edit`)} style={{ marginTop: rem(20) }}>
               Modifier mon profil
             </Button>
           )}
