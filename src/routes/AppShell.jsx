@@ -91,10 +91,11 @@ export default function AppShell({ onThemeChange }) {
             </Stack>
           ) : (
             <>
-              <Group>
+              <Group grow>
                 <Button onClick={() => handleThemeChange('light')}>Light</Button>
                 <Button onClick={() => handleThemeChange('dark')}>Dark</Button>
               </Group>
+              <Divider my="sm" mx="xl" />
               <Button component={Link} to="register" onClick={close} variant="outline">
                 Inscription
               </Button>
