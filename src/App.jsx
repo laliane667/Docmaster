@@ -45,7 +45,8 @@ const darkTheme = createTheme({
     Button: Button.extend({
       defaultProps: {
         radius: "md",
-        color: "#324795",
+        color: "blue",
+        //color: "#324795",
       },
     }),
     TextInput: TextInput.extend({
@@ -85,7 +86,8 @@ const lightTheme = createTheme({
     Button: Button.extend({
       defaultProps: {
         radius: "md",
-        color: "#324795",
+        color: "blue",
+        //color: "#324795",
       },
     }),
     TextInput: TextInput.extend({

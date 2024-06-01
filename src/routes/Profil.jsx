@@ -33,8 +33,8 @@ export default function Profil() {
 
     validate: {
       name: (value) => (profil.role === "company" && value === "" ? "Veuillez entrer un nom" : null),
-      firstName: (value) => (profil.role === "student" && value === "" ? "Veuillez entrer un prénom" : null),
-      lastName: (value) => (profil.role === "student" && value === "" ? "Veuillez entrer un nom" : null),
+      firstName: (value) => (profil.role === "user" && value === "" ? "Veuillez entrer un prénom" : null),
+      lastName: (value) => (profil.role === "user" && value === "" ? "Veuillez entrer un nom" : null),
       description: (value) => (value.length > 500 ? "Votre description ne peut pas faire plus de 500 caractères." : null),
       city: (value) => (value.length > 500 ? "Votre description ne peut pas faire plus de 500 caractères." : null),
     },
@@ -47,7 +47,7 @@ export default function Profil() {
       role: res.role,
       id: res._id,
       token: res.token,
-      fullName: res.role === "student" ? `${res.firstName} ${res.lastName}` : res.name,
+      fullName: res.role === "user" ? `${res.firstName} ${res.lastName}` : res.name,
       email: res.email,
       photo: res.photo,
     })
@@ -89,7 +89,7 @@ export default function Profil() {
                 error={form.errors.name}
               />
             )}
-            {profil.role === "student" && (
+            {profil.role === "user" && (
               <>
                 <TextInput
                   required

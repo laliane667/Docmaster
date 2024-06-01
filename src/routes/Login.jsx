@@ -32,7 +32,7 @@ export default function Login() {
       role: res.role,
       id: res._id,
       token: res.token,
-      fullName: res.role === "student" ? `${res.firstName} ${res.lastName}` : res.name,
+      fullName: res.role === "user" ? `${res.firstName} ${res.lastName}` : res.name,
       email: res.email,
       photo: res.photo,
       score: res.score,

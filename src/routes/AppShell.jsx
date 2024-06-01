@@ -60,6 +60,11 @@ export default function AppShell({ onThemeChange }) {
             <Link to="/">
               {/* <Image h={25} w="auto" fit="contain" src={XPMElogo} /> */}
             </Link>
+            <Group grow>
+              <Button onClick={() => handleThemeChange('light')}>Light</Button>
+              <Button onClick={() => handleThemeChange('dark')}>Dark</Button>
+            </Group>
+            <Divider my="sm" mx="xl" />
           </Center>
           {user.token ? (
             <Stack gap={0} ml="xs">
@@ -70,10 +75,7 @@ export default function AppShell({ onThemeChange }) {
               <Text truncate="end" w={180} c="dimmed" size="xs" fw={400}>
                 {user.email}
               </Text>
-              <Text truncate="end" w={180} c="dimmed" size="xs" fw={400}>
-                Score : {user.score}
-              </Text>
-              <Button component={Link} to="profil" onClick={close} color="black" w="fit-content" variant="light" mt="xs">
+              <Button component={Link} to="profil" onClick={close} w="fit-content" variant="light" mt="xs">
                 Mon profil
               </Button>
               {/* {user.role === "company" ? (
@@ -91,11 +93,6 @@ export default function AppShell({ onThemeChange }) {
             </Stack>
           ) : (
             <>
-              <Group grow>
-                <Button onClick={() => handleThemeChange('light')}>Light</Button>
-                <Button onClick={() => handleThemeChange('dark')}>Dark</Button>
-              </Group>
-              <Divider my="sm" mx="xl" />
               <Button component={Link} to="register" onClick={close} variant="outline">
                 Inscription
               </Button>
@@ -114,6 +111,7 @@ export default function AppShell({ onThemeChange }) {
                   <Stack gap={2}>
                     {tabs.map((tab) => (
                       <Button
+                        autoContrast
                         justify="flex-start"
                         key={tab.link}
                         onClick={() => {
@@ -198,15 +196,15 @@ export default function AppShell({ onThemeChange }) {
           </Group>
           <Divider mt="sm" />
           <Group gap="xs" justify="center">
-            <Anchor component={Link} to="/register" type="button" c="dimmed" size="sm">
+            <Anchor component={Link} to="/register" type="button" size="sm">
               Inscription
             </Anchor>
             <Divider orientation="vertical" my={4} />
-            <Anchor component={Link} to="/login" type="button" c="dimmed" size="sm">
+            <Anchor component={Link} to="/login" type="button" size="sm">
               Connexion
             </Anchor>
             <Divider orientation="vertical" my={4} />
-            <Anchor component={Link} to="/offers" type="button" c="dimmed" size="sm">
+            <Anchor component={Link} to="/offers" type="button" size="sm">
               Offres
             </Anchor>
             <Divider orientation="vertical" my={4} />

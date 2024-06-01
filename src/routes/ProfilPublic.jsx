@@ -8,7 +8,8 @@ import { NotifInfo, NotifSuccess } from "../components/Notification"
 import useNextRenderNavigate from "../tools/useNextRenderNavigate"
 
 export async function loaderProfilPublic(params) {
-  const profil = await get(`/${params.role}`, { token: params.token })
+  console.log("ROLE:" + params.role)
+  const profil = await get(`/user`, { token: params.token })
   return profil
 }
 
@@ -16,6 +17,8 @@ export default function ProfilPublic() {
   const profil = useLoaderData()
   const user = useUser()
   const navigate = useNavigate()
+
+
 
   return (
     <>
@@ -25,14 +28,14 @@ export default function ProfilPublic() {
             color="black"
             variant="filled"
             src={profil.photo}
-            alt={profil.role === "student" ? `${profil.firstName} ${profil.lastName}` : profil.name}
+            alt={profil.role === "user" ? `${profil.firstName} ${profil.lastName}` : profil.name}
             radius="sm"
             size={100}
             style={{ margin: "auto" }}
           />
           <Group position="center" mt="sm">
             <Text size="lg" weight={700}>
-              {profil.role === "student" ? `${profil.firstName} ${profil.lastName}` : profil.name}
+              {profil.role === "user" ? `${profil.firstName} ${profil.lastName}` : profil.name}
             </Text>
             <Text size="sm" color="gray">
               {profil.email}

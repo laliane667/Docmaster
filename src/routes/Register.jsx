@@ -36,8 +36,8 @@ export default function Register() {
       confirmPassword: (value, values) => (value !== values.password ? "Les mots de passes ne correspondent pas" : null),
       role: (value) => (value === "" ? "Veuillez choisir un rôle" : null),
       name: (value, values) => (values.role === "company" && value === "" ? "Veuillez entrer un nom" : null),
-      firstName: (value, values) => (values.role === "student" && value === "" ? "Veuillez entrer un prénom" : null),
-      lastName: (value, values) => (values.role === "student" && value === "" ? "Veuillez entrer un nom" : null),
+      firstName: (value, values) => (values.role === "user" && value === "" ? "Veuillez entrer un prénom" : null),
+      lastName: (value, values) => (values.role === "user" && value === "" ? "Veuillez entrer un nom" : null),
     },
   })
 
@@ -48,7 +48,7 @@ export default function Register() {
       role: res.role,
       id: res._id,
       token: res.token,
-      fullName: res.role === "student" ? `${res.firstName} ${res.lastName}` : res.name,
+      fullName: res.role === "user" ? `${res.firstName} ${res.lastName}` : res.name,
       email: res.email,
       photo: res.photo,
       score: res.score,
@@ -56,7 +56,7 @@ export default function Register() {
     })
     NotifSuccess(
       "Bienvenue sur XPME",
-      res.role === "student"
+      res.role === "user"
         ? "Votre compte en temps qu'étudiant à bien été créé nous vous remercions de votre confiance."
         : "Votre compte en temps qu'entreprise à bien été créé nous vous remercions de votre confiance.",
       8000
@@ -114,7 +114,7 @@ export default function Register() {
               label="Je m'inscris en tant que :"
               required>
               <Group grow m="sm">
-                <Radio value="student" label="Étudiant" />
+                <Radio value="user" label="User" />
                 <Radio value="company" label="Entreprise" />
               </Group>
             </Radio.Group>
@@ -128,7 +128,7 @@ export default function Register() {
                 error={form.errors.name}
               />
             )}
-            {form.values.role === "student" && (
+            {form.values.role === "user" && (
               <>
                 <TextInput
                   required
