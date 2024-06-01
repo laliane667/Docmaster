@@ -1,0 +1,39 @@
+header {
+  height: rem(50);
+  /* background: rgba(0, 0, 0, 0.99); */
+
+  /* background: var(--main_bg_color_dark); */
+
+  /* Light theme */
+  /* background: "rgb(129,129,129)"; */
+  backdrop-filter: blur(rem(6));
+  border-bottom: solid rem(1) #000000;
+  box-shadow: rgba(0, 0, 0, 0.05) 0 rem(3) rem(6);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+}
+
+main {
+  padding-top: rem(64);
+  /* background: #131313; */
+
+  /* Light theme */
+  /* background: "rgb(129,129,129)"; */
+
+  padding-bottom: rem(32);
+}
+
+footer {
+  border-top: rem(1) solid rgb(233, 236, 239);
+  /* background: #131313; */
+
+  /* Light theme */
+  /* background: "rgb(129,129,129)"; */
+
+  bottom: 0;
+  width: 100%;
+  padding: rem(15);
+}
+

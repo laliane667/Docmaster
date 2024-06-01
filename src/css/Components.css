@@ -1,0 +1,15 @@
+.file-selected {
+  width: 80%;
+  margin-right: 0;
+}
+
+.file-not-selected {
+  width: 100%;
+  margin-right: 0;
+}
+
+.file-selected label,
+.file-not-selected label {
+  margin-bottom: 15px;
+}
+

@@ -1,0 +1,29 @@
+:root {
+  /* background: #000; */
+  --main-bg-color-light: #fff;
+  --main_bg_color_dark: rgba(70, 70, 70, 125);
+  --secondary_bg_color_dark: rgb(42, 42, 42);
+  min-height: 100%;
+  position: relative;
+  --display-about: none;
+}
+
+html {
+  /* background: black; */
+  /* background: var(--main_bg_color_dark); */
+}
+
+body {
+  font-family: "Ubuntu Sans", sans-serif;
+  /* font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif; */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
