@@ -8,7 +8,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 import ContextProvider from "./ContextProvider";
-import { MantineProvider, virtualColor, createTheme, Button, Text, Anchor, TextInput, PasswordInput, Radio, Paper, Divider } from "@mantine/core";
+import { MantineProvider, virtualColor, createTheme, Button, Text, Anchor, TextInput, PasswordInput, Radio, Paper, Divider, Title } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { DatesProvider } from "@mantine/dates";
 import { useUser } from "./Context";
@@ -29,10 +29,11 @@ import HomePage from "./routes/HomePage"
 import Login from "./routes/Login"
 import MyGrades from "./routes/MyGrades"
 import MyOffers from "./routes/MyOffers"
-import Offers from "./routes/Offers"
+import Explore from "./routes/Explore"
+import Plans from "./routes/Plans"
 import OfferDetails, { loaderOfferDetails } from "./routes/OfferDetails"
 import OngoingProjects from "./routes/OngoingProjects"
-import PastProjects from "./routes/PastProjects"
+import Projects from "./routes/Projects"
 import Profil, { loaderProfil } from "./routes/Profil"
 import ProfilPublic, { loaderProfilPublic } from "./routes/ProfilPublic"
 import Parameters from "./routes/Parameters"
@@ -181,6 +182,12 @@ const lightTheme = createTheme({
 
       },
     }),
+    /* Title: Text.extend({
+      defaultProps: {
+        fontFamily: "Ubuntu Sans, sans-serif",
+        color: "#000"
+      }, 
+    }),*/
     Text: Text.extend({
       defaultProps: {
         color: "#000"
@@ -226,8 +233,12 @@ function Routes({ onThemeChange }) {
           element: <Register />,
         },
         {
-          path: "offers",
-          element: <Offers />,
+          path: "explore",
+          element: <Explore />,
+        },
+        {
+          path: "plans",
+          element: <Plans />,
         },
         {
           path: "offerdetails/:id",
@@ -277,8 +288,8 @@ function Routes({ onThemeChange }) {
           element: <ReportDetails />,
         },
         {
-          path: "pastprojects",
-          element: <PastProjects />,
+          path: "projects",
+          element: <Projects />,
         },
         {
           path: "ongoingprojects",
@@ -344,7 +355,6 @@ function App() {
 
   return (
     <>
-      {/* <ColorSchemeScript defaultColorScheme="auto" /> */}
       <ContextProvider>
         <MantineProvider theme={colorScheme === 'dark' ? darkTheme : lightTheme} forceColorScheme={colorScheme}>
           <DatesProvider settings={{ locale: "fr" }}>

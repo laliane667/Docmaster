@@ -1,7 +1,7 @@
 import "../css/AppShell.module.css"
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { useMantineColorScheme, Button, Group, Drawer, Burger, Stack, Avatar, Divider, Image, Center, Text, Tooltip, Anchor, rem, useMantineTheme } from "@mantine/core"
+import { Button, Group, Drawer, Burger, Stack, Avatar, Divider, Image, Center, Text, Tooltip, Anchor, rem, useMantineTheme } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks"
 import { useUser, useSetUser } from "../Context"
 import Logout from "../tools/Logout"
@@ -37,10 +37,11 @@ export default function AppShell({ onThemeChange }) {
 
   const tabs = [
     //{ link: "/", label: "Page d'acceuil", icon: IconHome },
-    { link: "ongoingprojects", label: "Mes projets", icon: IconList },
+    { link: "projects", label: "Mes projets", icon: IconList },
     { link: "offers", label: "Mes documentations", icon: IconVocabulary },
     { link: "parameters", label: "Paramètres", icon: IconSettings },
-    //{ link: "companies", label: "Entreprises", icon: IconBuilding },
+    { link: "explore", label: "Explore", icon: IconList },
+    { link: "plans", label: "Plans", icon: IconList },
   ]
   const companyTabs = [
     //{ link: "/", label: "Page d'acceuil", icon: IconHome },
@@ -182,7 +183,7 @@ export default function AppShell({ onThemeChange }) {
           <Link to="/">
             <Image h={35} w="auto" fit="contain" src={theme.black == "#000" ? logo_docmaster : logo_docmaster_light} />          </Link>
 
-          <Burger opened={opened} onClick={toggle} aria-label="Toggle navigation" />
+          <Burger opened={opened} color="secondary" onClick={toggle} aria-label="Toggle navigation" />
         </Group>
       </header>
 
