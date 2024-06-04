@@ -78,6 +78,12 @@ export default function Explore() {
         <Text size="2rem" my="xl" fw={200}>
           Qu'est-ce que Docmaster ?
         </Text>
+        <Text
+          ta="center"
+          p="xl"
+        >
+          Docmaster est une application innovante de documentation générée par IA, conçue pour faciliter la création de documents pour des projets dans divers langages de programmation. Grâce à Docmaster, obtenez des documentations complètes, claires et précises de manière rapide et efficace, que ce soit par abonnement mensuel ou via un service à la demande. Simplifiez votre processus de documentation et concentrez-vous sur ce qui compte vraiment : le développement de votre projet.
+        </Text>
       </Paper>
     </Stack >
   )

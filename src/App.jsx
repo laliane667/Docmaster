@@ -45,16 +45,16 @@ const darkTheme = createTheme({
   colorScheme: 'dark',
   colors: {
     primary: [
-      '#324795',
-      '#324795',
-      '#324795',
-      '#324795',
-      '#324795',
-      '#324795',
-      '#324795',
-      '#324795',
-      '#324795',
-      '#324795',
+      '#ABC7F8',
+      '#ABC7F8',
+      '#ABC7F8',
+      '#ABC7F8',
+      '#ABC7F8',
+      '#ABC7F8',
+      '#ABC7F8',
+      '#ABC7F8',
+      '#ABC7F8',
+      '#ABC7F8',
     ],
     secondary: [
       '#ffffff',
@@ -74,6 +74,7 @@ const darkTheme = createTheme({
       defaultProps: {
         radius: 'md',
         color: 'primary',
+        autoContrast: true
       },
       variants: {
         secondary: {
