@@ -9,7 +9,7 @@ import { useMediaQuery } from "react-responsive";
 
 import logo_docmaster from "../assets/docmaster.png"
 import logo_docmaster_light from "../assets/docmaster_inverted.png"
-export default function Plans() {
+export default function SubscriptionBundle() {
   const theme = useMantineTheme();
   const isLargeScreen = useMediaQuery(
     { minDeviceWidth: 1224 }
@@ -21,51 +21,56 @@ export default function Plans() {
       <Paper radius="md" p="xl" m="sm" withBorder w="100%" maw={1150}>
         <Stack mb="md" mt="md" align="center">
           <Image style={{ width: rem(200) }} fit="contain" src={theme.black == "#000" ? logo_docmaster : logo_docmaster_light} />
-          <Text mb="md" ta="center">L'utilisation de Docmaster se mesure au nombre de lignes de code à analyser.
+          <Text mb="md" ta="center">L'utilisation de Docmaster se mesure au nombre de lignes de code à analyser.<br />
             Deux types de formule s'offrent à vous :</Text>
           {isLargeScreen ? (
-            <Group style={{ display: "flex", flexWrap: "wrap" }}>
-
-              <Card w="48%" radius="md" p="xl" withBorder="secondary">
+            <Group p="xl" w="100%" style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between" }}>
+              <Card w="32%" radius="md" p="xl" withBorder>
                 <Title ta="center" mx="md" order={3} fw={600}>
-                  Abonnement mensuel
+                  Basique
                 </Title>
+                <Text ta="center" size="lg" fw={600}>
+                  4€/mois
+                </Text>
                 <Divider my="md" />
-                <Text mb="md" fw={600}>
-                  Rechargez tous les mois votre stock de crédits.
+                <Text mb="md" ta="center" size="lg" fw={600}>
+                  Nombre de lignes : 10 000
                 </Text>
-                <Text mb="md">
-                  Adaptez votre plan en fonction de votre besoin :
-                </Text>
-                <List m="sm">
-                  <List.Item>Basic</List.Item>
-                  <List.Item>Avancé</List.Item>
-                  <List.Item>Industriel</List.Item>
-                </List>
-                <Button component={Link} to="/subscriptionbundle">
+                <Button>
                   Voir les plans
                 </Button>
               </Card>
-              <Card w="48%" radius="md" p="xl" withBorder="white">
+              <Card w="32%" radius="md" p="xl" style={{ border: "1px solid silver" }}>
                 <Title ta="center" mx="md" order={3} fw={600}>
-                  Acheter une doc
+                  Avancé
                 </Title>
+                <Text ta="center" size="lg" fw={600}>
+                  14€/mois
+                </Text>
                 <Divider my="md" />
-                <Text fw={600} mb="md">
-                  Description sur mesure, <br />Prix sur mesure.
-                </Text>
-
-                <Text mb="md">
-                  Idéal pour tester sur des projets de compléxité moyenne à basse.
-                </Text>
-
-                <Text mb="md">
-                  Chargez votre projet pour obtenir le prix de la documentation.
+                <Text mb="md" ta="center" size="lg" fw={600}>
+                  Nombre de lignes : 100 000
                 </Text>
                 <Button>
-                  Commencer
+                  Voir les plans
                 </Button>
               </Card>
+              <Card w="32%" radius="md" p="xl" style={{ border: "1px solid gold" }}>
+                <Title ta="center" mx="md" order={3} fw={600}>
+                  Industriel
+                </Title>
+                <Text ta="center" size="lg" fw={600}>
+                  94€/mois
+                </Text>
+                <Divider my="md" />
+                <Text mb="md" ta="center" size="lg" fw={600}>
+                  Nombre de lignes : 1M
+                </Text>
+                <Button>
+                  Voir les plans
+                </Button>
+              </Card>
+
             </Group>
 
           ) : (
@@ -73,42 +78,47 @@ export default function Plans() {
 
               <Card w="100%" radius="md" p="xl" withBorder="white">
                 <Title ta="center" mx="md" order={3} fw={600}>
-                  Abonnement mensuel
+                  Basique
                 </Title>
+                <Text ta="center" size="lg" fw={600}>
+                  4€/mois
+                </Text>
                 <Divider my="md" />
-                <Text mb="md" fw={600}>
-                  Rechargez tous les mois votre stock de crédits.
+                <Text mb="md" ta="center" size="lg" fw={600}>
+                  Nombre de lignes : 10 000
                 </Text>
-                <Text mb="md">
-                  Adaptez votre plan en fonction de votre besoin :
-                </Text>
-                <List m="sm">
-                  <List.Item>Basic</List.Item>
-                  <List.Item>Avancé</List.Item>
-                  <List.Item>Industriel</List.Item>
-                </List>
-                <Button component={Link} to="/subscriptionbundle">
+                <Button>
                   Voir les plans
                 </Button>
               </Card>
               <Card w="100%" radius="md" p="xl" withBorder="white">
                 <Title ta="center" mx="md" order={3} fw={600}>
-                  Acheter une doc
+                  Avancé
                 </Title>
+                <Text ta="center" size="lg" fw={600}>
+                  14€/mois
+                </Text>
                 <Divider my="md" />
-                <Text fw={600} mb="md">
-                  Description sur mesure, <br />Prix sur mesure.
-                </Text>
-
-                <Text mb="md">
-                  Idéal pour tester sur des projets de compléxité moyenne à basse.
-                </Text>
-
-                <Text mb="md">
-                  Chargez votre projet pour obtenir le prix de la documentation.
+                <Text mb="md" ta="center" size="lg" fw={600}>
+                  Nombre de lignes : 100 000
                 </Text>
                 <Button>
-                  Commencer
+                  Voir les plans
+                </Button>
+              </Card>
+              <Card w="100%" radius="md" p="xl" withBorder="white">
+                <Title ta="center" mx="md" order={3} fw={600}>
+                  Industriel
+                </Title>
+                <Text ta="center" size="lg" fw={600}>
+                  94€/mois
+                </Text>
+                <Divider my="md" />
+                <Text mb="md" ta="center" size="lg" fw={600}>
+                  Nombre de lignes : 1M
+                </Text>
+                <Button>
+                  Voir les plans
                 </Button>
               </Card>
             </Group>

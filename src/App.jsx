@@ -31,6 +31,7 @@ import MyGrades from "./routes/MyGrades"
 import MyOffers from "./routes/MyOffers"
 import Explore from "./routes/Explore"
 import Plans from "./routes/Plans"
+import SubscriptionBundle from "./routes/SubscriptionBundle"
 import OfferDetails, { loaderOfferDetails } from "./routes/OfferDetails"
 import OngoingProjects from "./routes/OngoingProjects"
 import Projects from "./routes/Projects"
@@ -117,7 +118,7 @@ const darkTheme = createTheme({
     Paper: Paper.extend({
       styles: (theme) => ({
         root: {
-          borderColor: "#fff",
+          //borderColor: "#fff",
           backgroundColor: "#101010"
         },
       }),
@@ -203,9 +204,9 @@ const lightTheme = createTheme({
     Paper: Paper.extend({
       styles: (theme) => ({
         root: {
-          borderColor: "#000",
-          backgroundColor: "#fff"
-          //backgroundColor: "#e0e0e0"
+          //borderColor: "#000",
+          //backgroundColor: "#fff"
+          backgroundColor: "#fafafa"
         },
       }),
     }),
@@ -240,6 +241,10 @@ function Routes({ onThemeChange }) {
         {
           path: "plans",
           element: <Plans />,
+        },
+        {
+          path: "subscriptionbundle",
+          element: <SubscriptionBundle />,
         },
         {
           path: "offerdetails/:id",
