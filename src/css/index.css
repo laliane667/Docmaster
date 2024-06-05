@@ -13,7 +13,14 @@ html {
   /* background: var(--main_bg_color_dark); */
 }
 
-body {
+@media (min-width: 1150px) {
+  .plan-card {
+    max-width: 50%;
+  }
+}
+
+body,
+* {
   font-family: "Ubuntu Sans", sans-serif;
   /* font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
     "Helvetica Neue", sans-serif; */
