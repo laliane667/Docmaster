@@ -8,7 +8,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 import ContextProvider from "./ContextProvider";
-import { MantineProvider, virtualColor, createTheme, Button, Text, Anchor, TextInput, PasswordInput, Radio, Paper, Divider, Title } from "@mantine/core";
+import { MantineProvider, virtualColor, createTheme, Button, Text, Anchor, TextInput, PasswordInput, Radio, Paper, Divider, Badge } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { DatesProvider } from "@mantine/dates";
 import { useUser } from "./Context";
@@ -34,6 +34,8 @@ import Plans from "./routes/Plans"
 import SubscriptionBundle from "./routes/SubscriptionBundle"
 import OfferDetails, { loaderOfferDetails } from "./routes/OfferDetails"
 import OngoingProjects from "./routes/OngoingProjects"
+import Project from "./routes/Project"
+import ProjectEditCreate, { loaderCreateEditProject } from "./routes/ProjectEditCreate"
 import Projects from "./routes/Projects"
 import Profil, { loaderProfil } from "./routes/Profil"
 import ProfilPublic, { loaderProfilPublic } from "./routes/ProfilPublic"
@@ -72,6 +74,18 @@ const darkTheme = createTheme({
   },
   components: {
     Button: {
+      defaultProps: {
+        radius: 'md',
+        color: 'primary',
+        autoContrast: true
+      },
+      variants: {
+        secondary: {
+          color: 'secondary',
+        },
+      },
+    },
+    Badge: {
       defaultProps: {
         radius: 'md',
         color: 'primary',
@@ -156,6 +170,13 @@ const lightTheme = createTheme({
   },
   components: {
     Button: Button.extend({
+      defaultProps: {
+        radius: "md",
+        color: "blue",
+        color: "#324795",
+      },
+    }),
+    Badge: Button.extend({
       defaultProps: {
         radius: "md",
         color: "blue",
@@ -292,6 +313,24 @@ function Routes({ onThemeChange }) {
         {
           path: "reportdetails/:id",
           element: <ReportDetails />,
+        },
+        {
+          path: "project/:id",
+          element: <Project />,
+        },
+        {
+          path: "projectcreate",
+          element: <ProjectEditCreate />,
+          loader: async () => {
+            return await loaderCreateEditOffer()
+          },
+        },
+        {
+          path: "projectedit/:id",
+          element: <ProjectEditCreate />,
+          loader: async ({ params }) => {
+            return await loaderCreateEditProject(params)
+          },
         },
         {
           path: "projects",

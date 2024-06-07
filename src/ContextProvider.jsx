@@ -15,8 +15,6 @@ export default function ContextProvider({ children }) {
     email: readCookie("email"),
     fullName: readCookie("fullName"),
     photo: readCookie("photo"),
-    score: readCookie("score"),
-    grade: readCookie("grade"),
   }
 
   return <CreateContext defaultUser={defaultUser}>{children}</CreateContext>
@@ -36,8 +34,6 @@ function CreateContext({ children, defaultUser }) {
     createCookie("email", user.email, 365)
     createCookie("fullName", user.fullName, 365)
     createCookie("photo", user.photo, 365)
-    createCookie("score", user.score, 365)
-    createCookie("grade", user.grade, 365)
   }, [user])
 
   return (

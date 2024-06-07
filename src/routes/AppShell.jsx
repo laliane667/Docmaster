@@ -28,7 +28,7 @@ import Parameters from "./Parameters"
 export default function AppShell({ onThemeChange }) {
   const theme = useMantineTheme();
   const [ColorScheme, setColorScheme] = useState("dark")
-  console.log(theme.black)
+  //console.log(theme.black)
   const user = useUser()
   const setUser = useSetUser()
   const navigate = useNavigate()
@@ -37,6 +37,7 @@ export default function AppShell({ onThemeChange }) {
 
   const tabs = [
     //{ link: "/", label: "Page d'acceuil", icon: IconHome },
+    { link: "projectcreate", label: "Créer un projet", icon: IconSquarePlus, highlight: true },
     { link: "projects", label: "Mes projets", icon: IconList },
     { link: "offers", label: "Mes documentations", icon: IconVocabulary },
     { link: "parameters", label: "Paramètres", icon: IconSettings },
@@ -53,7 +54,7 @@ export default function AppShell({ onThemeChange }) {
 
   const handleThemeChange = (theme) => {
     onThemeChange(theme);
-    console.log(theme)
+    //console.log(theme)
     setColorScheme(theme)
   };
 
