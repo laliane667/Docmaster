@@ -28,7 +28,8 @@ export const OFFERS_LIST = [
   },
 ]
 
-export const CATCH_PHRASE = "Vivez l'expérience professionnelle"
+export const CATCH_PHRASE = "Une efficacité unique, seulement sur Docmaster"
+export const VERSION = "V0.2"
 
 export const SECTORS = [
   { group: "Web", items: ["Wordpress", "Développement", "Cybersécurité", "Data", "Cloud"] },

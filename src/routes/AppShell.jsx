@@ -9,7 +9,7 @@ import { Outlet } from "react-router-dom"
 import {
   IconHome,
   IconBriefcase,
-  IconStar,
+  IconServer2,
   IconSquarePlus,
   IconSettings,
   IconListDetails,
@@ -18,7 +18,11 @@ import {
   IconList,
   IconBrandX,
   IconVocabulary,
+  IconLogout,
+  IconSun,
+  IconMoon
 } from "@tabler/icons-react"
+
 import { CATCH_PHRASE } from "../tools/Constants"
 
 import logo_docmaster from "../assets/docmaster.png"
@@ -37,12 +41,15 @@ export default function AppShell({ onThemeChange }) {
 
   const tabs = [
     //{ link: "/", label: "Page d'acceuil", icon: IconHome },
-    { link: "projectcreate", label: "Créer un projet", icon: IconSquarePlus, highlight: true },
+    { link: "projectcreate", label: "Nouveau", icon: IconSquarePlus, variant: "outline" },
     { link: "projects", label: "Mes projets", icon: IconList },
+    //{ link: "parameters", label: "Paramètres", icon: IconSettings },
+    //{ link: "explore", label: "Explore", icon: IconList },
+    //{ link: "plans", label: "Plans", icon: IconList },
+  ]
+  const doctabs = [
+    { link: "servers", label: "Mes servers", icon: IconServer2 },
     { link: "offers", label: "Mes documentations", icon: IconVocabulary },
-    { link: "parameters", label: "Paramètres", icon: IconSettings },
-    { link: "explore", label: "Explore", icon: IconList },
-    { link: "plans", label: "Plans", icon: IconList },
   ]
   const companyTabs = [
     //{ link: "/", label: "Page d'acceuil", icon: IconHome },
@@ -52,6 +59,13 @@ export default function AppShell({ onThemeChange }) {
     //{ link: "companies", label: "Entreprises", icon: IconBuilding },
   ]
 
+  const toggleColorScheme = () => {
+    if (theme.black == "#000") {
+      handleThemeChange('light')
+    } else {
+      handleThemeChange('dark')
+    }
+  };
   const handleThemeChange = (theme) => {
     onThemeChange(theme);
     //console.log(theme)
@@ -60,30 +74,42 @@ export default function AppShell({ onThemeChange }) {
 
   return (
     <>
-      <Drawer size={250} opened={opened} onClose={close} withCloseButton={false}>
+      <Drawer size={300} opened={opened} onClose={close} withCloseButton={false}>
         <Stack gap={0}>
           <Center mb="xl" mt="md">
             <Link to="/">
               <Image h={50} w="auto" fit="contain" src={theme.black == "#000" ? logo_docmaster : logo_docmaster_light} />
             </Link>
           </Center>
-          <Group grow>
+          {/* <Group grow>
             <Button onClick={() => handleThemeChange('light')}>Light</Button>
             <Button onClick={() => handleThemeChange('dark')}>Dark</Button>
           </Group>
-          <Divider my="sm" mx="xl" />
+          <Divider my="sm" mx="xl" /> */}
           {user.token ? (
-            <Stack gap={0} ml="xs">
-              <Avatar src={user.photo} variant="filled" radius="sm" size={55} color="black" mb="xs" />
-              <Text size="sm" fw={500}>
-                {user.fullName === null || user.fullName === "null" ? "Mon compte" : user.fullName}
-              </Text>
-              <Text truncate="end" w={180} c="dimmed" size="xs" fw={400}>
-                {user.email}
-              </Text>
-              <Button component={Link} to="profil" onClick={close} w="fit-content" variant="light" mt="xs">
-                Mon profil
-              </Button>
+            <Stack gap={0} ml="xs" mb="xl">
+              <Group style={{ display: "flex", flexWrap: "nowrap" }}>
+                <Avatar src={user.photo} variant="filled" radius="sm" size={55} color="black" mb="xs" />
+
+                <Stack gap={0}>
+                  <Text size="sm" fw={500}>
+                    {user.fullName === null || user.fullName === "null" ? "Mon compte" : user.fullName}
+                  </Text>
+                  <Text truncate="end" w={180} c="dimmed" size="xs" fw={400}>
+                    {user.email}
+                  </Text>
+
+                </Stack>
+              </Group>
+              <Group grow>
+
+                <Button component={Link} to="profil" onClick={close} w="fit-content" mt="xs">
+                  Mon profil
+                </Button>
+                <Button component={Link} to="profil" onClick={close} w="fit-content" variant="outline" mt="xs">
+                  Équipes
+                </Button>
+              </Group>
               {/* {user.role === "company" ? (
                 <>
                   <Button component={Link} to="myoffers" onClick={close} color="black" w="fit-content" variant="light" mt="xs">
@@ -109,11 +135,33 @@ export default function AppShell({ onThemeChange }) {
             </>
           )}
 
-          <Divider size="sm" my="lg" color="dark" />
+          {/* <Divider size="sm" my="lg" color="dark" /> */}
           {user.token ? (
             <>
               {user.role !== "company" && (
                 <>
+                  {doctabs.map((tab) => (
+                    <Button
+                      autoContrast
+                      justify="flex-start"
+                      key={tab.link}
+                      onClick={() => {
+                        navigate(tab.link);
+                        setActiveTab(tab.link);
+                        close();
+                      }}
+                      variant={tab.link == "projectcreate" ? ("outline") : (activeTab === tab.link ? ("light") : ("subtle"))}
+                      color="secondary"
+                      leftSection={<tab.icon />}
+                      radius="sm"
+                      p="sm"
+                      h="auto"
+                    >
+                      {tab.label}
+                    </Button>
+                  ))}
+                  <Divider size="sm" my="lg" color="dark" />
+
                   <Stack gap={2}>
                     {tabs.map((tab) => (
                       <Button
@@ -125,56 +173,34 @@ export default function AppShell({ onThemeChange }) {
                           setActiveTab(tab.link);
                           close();
                         }}
-                        variant={activeTab === tab.link ? "light" : "subtle"}
+                        variant={tab.link == "projectcreate" ? ("outline") : (activeTab === tab.link ? ("light") : ("subtle"))}
                         color="secondary"
                         leftSection={<tab.icon />}
                         radius="sm"
                         p="sm"
                         h="auto"
+                        mb="sm"
                       >
                         {tab.label}
                       </Button>
                     ))}
-                  </Stack>
-                  <Divider size="sm" my="lg" color="dark" />
-                </>
-              )}
+                    <Divider size="sm" my="lg" color="dark" />
 
-              {user.role === "company" && (
-                <>
-                  <Stack gap={2}>
-                    {companyTabs.map((tab) => (
-                      <Button
-                        justify="flex-start"
-                        key={tab.link}
-                        onClick={() => {
-                          navigate(tab.link);
-                          setActiveTab(tab.link);
-                          close();
-                        }}
-                        variant={tab.highlight ? "filled" : activeTab === tab.link ? "light" : "subtle"}
-                        leftSection={<tab.icon />}
-                        radius="sm"
-                        p="sm"
-                        h="auto"
-                      >
-                        {tab.label}
-                      </Button>
-                    ))}
                   </Stack>
-                  <Divider size="sm" my="lg" color="dark" />
+
                 </>
               )}
             </>
           ) : null}
-
-          {/* <Button fullWidth color="grey" size="compact-sm" component={Link} to="parameters" onClick={close} variant="light" mt="xs">
-            Paramètres
-          </Button> */}
           {user.token && (
-            <Button fullWidth color="red" size="compact-sm" onClick={() => Logout(setUser, navigate)} variant="light" mt="xs">
-              Déconnexion
-            </Button>
+            <>
+              <Button leftSection={<IconSettings />} fullWidth size="compact-sm" component={Link} to="parameters" onClick={close} variant="light" mt="xs">
+                Paramètres
+              </Button>
+              <Button leftSection={<IconLogout />} fullWidth color="red" size="compact-sm" onClick={() => Logout(setUser, navigate)} variant="light" mt="xs">
+                Déconnexion
+              </Button>
+            </>
           )}
         </Stack>
       </Drawer>
@@ -184,7 +210,21 @@ export default function AppShell({ onThemeChange }) {
           <Link to="/">
             <Image h={35} w="auto" fit="contain" src={theme.black == "#000" ? logo_docmaster : logo_docmaster_light} />          </Link>
 
-          <Burger opened={opened} color="secondary" onClick={toggle} aria-label="Toggle navigation" />
+          <Group>
+            <Button component={Link} to="home" onClick={close} w="fit-content" variant="outline">
+              Commencer
+            </Button>
+            <Button component={Link} to="plans" onClick={close} w="fit-content" variant="outline">
+              Plans
+            </Button>
+            <Button size="sm" px="10px" onClick={toggleColorScheme}>
+              {theme.black == "#000" ? <IconSun /> : <IconMoon />}
+            </Button>
+            {user.token && (
+              <Burger opened={opened} color="secondary" onClick={toggle} aria-label="Toggle navigation" />
+
+            )}
+          </Group>
         </Group>
       </header>
 

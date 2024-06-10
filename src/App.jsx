@@ -245,6 +245,10 @@ function Routes({ onThemeChange }) {
       children: [
         {
           path: "/",
+          element: <Explore />,
+        },
+        {
+          path: "/home",
           element: <HomePage />,
         },
         {
