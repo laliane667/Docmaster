@@ -17,7 +17,7 @@ const projectTypeImages = {
 };
 
 export default function Projects() {
-  const projectType = "java"; // Remplacez par le type de projet réel
+  const projectType = "js"; // Remplacez par le type de projet réel
 
   // Vérifiez si l'association pour le type de projet existe
   const projectImage = projectTypeImages[projectType];
@@ -61,7 +61,7 @@ export default function Projects() {
                       <Title ta="left" m="0" order={3} fw={600}>
                         {project.name}
                       </Title>
-                      <Badge px="5px" py="3px" variant="filled" radius="18px" miw="15px" h="17px" color="green">Nouveau</Badge>
+                      <Badge px="5px" py="3px" variant="filled" radius="18px" miw="15px" h="17px" color={project.tagCol}>{project.tagValue}</Badge>
                     </Group>
                     <Group ml="xs" mt={0}>
                       {React.createElement(IconRadiusBottomLeft)}

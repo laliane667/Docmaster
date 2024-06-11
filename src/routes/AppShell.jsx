@@ -211,12 +211,16 @@ export default function AppShell({ onThemeChange }) {
             <Image h={35} w="auto" fit="contain" src={theme.black == "#000" ? logo_docmaster : logo_docmaster_light} />          </Link>
 
           <Group>
-            <Button component={Link} to="home" onClick={close} w="fit-content" variant="outline">
-              Commencer
-            </Button>
-            <Button component={Link} to="plans" onClick={close} w="fit-content" variant="outline">
-              Plans
-            </Button>
+            {!user.token && (
+              <Group>
+                <Button component={Link} to="home" onClick={close} w="fit-content" variant="outline">
+                  Commencer
+                </Button>
+                <Button component={Link} to="plans" onClick={close} w="fit-content" variant="outline">
+                  Plans
+                </Button>
+              </Group>
+            )}
             <Button size="sm" px="10px" onClick={toggleColorScheme}>
               {theme.black == "#000" ? <IconSun /> : <IconMoon />}
             </Button>
