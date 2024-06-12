@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, Title, rem, Divider, Center, Image, Badge } from "@mantine/core";
-import { TextInput, Text, Paper, Group, Button, Textarea, Stack, MultiSelect, NumberInput, Modal } from "@mantine/core"
+import { TextInput, Text, Paper, Group, Button, Textarea, Stack, Flex, Box, MultiSelect, NumberInput, Modal } from "@mantine/core"
 import { IconRadiusBottomLeft, IconChevronDown, IconEdit, IconCalendar, IconTrendingUp, IconVocabulary, IconListNumbers } from "@tabler/icons-react";
 
 import { DatePickerInput } from "@mantine/dates"
@@ -12,6 +12,7 @@ import { NotifInfo, NotifSuccess } from "../components/Notification"
 import useNextRenderNavigate from "../tools/useNextRenderNavigate"
 import { SECTORS } from "../tools/Constants"
 import { useState } from "react"
+import { Grid, /* ...autres imports... */ } from "@mantine/core";
 
 
 import gitHub from "../assets/typeImage/github.png"
@@ -71,65 +72,83 @@ export default function ProjectEditCreate() {
     }
   }
   return (
-    <>
-      <Stack align="center">
-        <Paper radius="md" p="xl" m="sm" withBorder w="100%" maw={400}>
-          {projectNotFound ? (
-            <Text>Projet non trouvé</Text>
-          ) : (
-            <form onSubmit={form.onSubmit(() => handleSubmit())}>
-              <Text size="lg" fw={500}>
-                {editing ? "Modifier le projet" : "Créer un projet"}
-              </Text>
-              <Stack mt="sm" gap="xs">
-                <TextInput
-                  label="Nom"
-                  placeholder="Nom"
-                  value={form.values.title}
-                  onChange={(event) => form.setFieldValue("name", event.currentTarget.value)}
-                  error={form.errors.title}
-                />
-                <Textarea
-                  label="Description"
-                  placeholder="Description"
-                  value={form.values.description}
-                  onChange={(event) => form.setFieldValue("description", event.currentTarget.value)}
-                  error={form.errors.description}
-                  autosize
-                  minRows={3}
-                />
+    <Flex align="center">
+      <Box flex="1" mr="md">
+        <Stack align="center">
+          <Paper radius="md" p="lg" withBorder w="100%">
+            {projectNotFound ? (
+              <Text>Projet non trouvé</Text>
+            ) : (
+              <form onSubmit={form.onSubmit(() => handleSubmit())}>
+                <Text size="lg" fw={500}>
+                  {editing ? "Modifier le projet" : "Créer un projet"}
+                </Text>
+                <Stack mt="sm" gap="xs">
+                  <TextInput
+                    label="Nom"
+                    placeholder="Nom"
+                    value={form.values.name}
+                    onChange={(event) => form.setFieldValue("name", event.currentTarget.value)}
+                    error={form.errors.name}
+                  />
+                  <Textarea
+                    label="Description"
+                    placeholder="Description"
+                    value={form.values.description}
+                    onChange={(event) => form.setFieldValue("description", event.currentTarget.value)}
+                    error={form.errors.description}
+                    autosize
+                    minRows={3}
+                  />
 
-              </Stack>
-              <Group justify="space-between" mt="xl">
-                <Button onClick={() => handleCancel()}>Annuler</Button>
-                <Button type="submit">{editing ? "Modifier" : "Créer"}</Button>
-              </Group>
-              <Group justify="space-between" mt="xl">
-                <Modal
-                  opened={openDeleteModal}
-                  onClose={() => setOpenDeleteModal(false)}
-                  withCloseButton={false}
-                  centered
-                  overlayProps={{
-                    backgroundOpacity: 0.55,
-                    blur: 3,
-                  }}>
-                  <Text>Êtes-vous sûr de vouloir supprimer ce projet ?</Text>
-                  <Group mt="lg" justify="space-between">
-                    <Button onClick={() => setOpenDeleteModal(false)}>Annuler</Button>
-                    <Button color="red" onClick={() => handleDelete()}>
-                      Supprimer
-                    </Button>
-                  </Group>
-                </Modal>
-                <Button fullWidth color="red" size="compact-sm" variant="light" mt="xs" onClick={() => setOpenDeleteModal(true)}>
-                  Supprimer le projet
-                </Button>
-              </Group>
-            </form>
-          )}
-        </Paper>
-      </Stack>
-    </>
+                </Stack>
+                <Group justify="space-between" mt="xl">
+                  <Button onClick={() => handleCancel()}>Annuler</Button>
+                  <Button type="submit">{editing ? "Modifier" : "Créer"}</Button>
+                </Group>
+                <Group justify="space-between" mt="xl">
+                  <Modal
+                    opened={openDeleteModal}
+                    onClose={() => setOpenDeleteModal(false)}
+                    withCloseButton={false}
+                    centered
+                    overlayProps={{
+                      backgroundOpacity: 0.55,
+                      blur: 3,
+                    }}>
+                    <Text>Êtes-vous sûr de vouloir supprimer ce projet ?</Text>
+                    <Group mt="lg" justify="space-between">
+                      <Button onClick={() => setOpenDeleteModal(false)}>Annuler</Button>
+                      <Button color="red" onClick={() => handleDelete()}>
+                        Supprimer
+                      </Button>
+                    </Group>
+                  </Modal>
+                  <Button fullWidth color="red" size="compact-sm" variant="light" mt="xs" onClick={() => setOpenDeleteModal(true)}>
+                    Supprimer le projet
+                  </Button>
+                </Group>
+              </form>
+            )}
+          </Paper>
+        </Stack>
+      </Box>
+      <Paper radius="md" p="lg" withBorder maw="250px">
+        <Button fullWidth variant="light" mt="xs">
+          Aperçu général
+        </Button>
+        <Button fullWidth variant="light" mt="xs">
+          Paramètres
+        </Button>
+        <Button fullWidth color="red" variant="light" mt="xs">
+          Danger zone
+        </Button>
+
+      </Paper>
+    </Flex>
+
+
+
+
   )
 }

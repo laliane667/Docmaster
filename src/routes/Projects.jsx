@@ -130,7 +130,7 @@ export default function Projects() {
                   </Stack>
                 </Group>
                 <Group>
-                  <Button component={Link} to="/login">
+                  <Button component={Link} to={`/projectedit/${project._id}`}>
                     Gérer
                   </Button>
                   <Button variant="outline" component={Link} to="/login">

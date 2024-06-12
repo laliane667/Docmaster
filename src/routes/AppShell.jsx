@@ -1,7 +1,7 @@
 import "../css/AppShell.module.css"
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { Button, Group, Drawer, Burger, Stack, Avatar, Divider, Image, Center, Text, Tooltip, Anchor, rem, useMantineTheme } from "@mantine/core"
+import { Modal, Button, Group, Drawer, Burger, Stack, Avatar, Divider, Image, Center, Box, Flex, Text, Tooltip, Anchor, rem, TextInput, useMantineTheme } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks"
 import { useUser, useSetUser } from "../Context"
 import Logout from "../tools/Logout"
@@ -23,6 +23,9 @@ import {
   IconMoon
 } from "@tabler/icons-react"
 
+import { useForm } from "@mantine/form"
+import { put, get, post, del } from "../tools/Request"
+
 import { CATCH_PHRASE } from "../tools/Constants"
 import { useMediaQuery } from "react-responsive";
 
@@ -41,6 +44,8 @@ export default function AppShell({ onThemeChange }) {
   const setUser = useSetUser()
   const navigate = useNavigate()
   const [opened, { close, toggle }] = useDisclosure(false)
+  const [modalOpened, setModalOpened] = useState(false);
+
   const [activeTab, setActiveTab] = useState("/")
 
   const tabs = [
@@ -55,13 +60,27 @@ export default function AppShell({ onThemeChange }) {
     { link: "servers", label: "Mes servers", icon: IconServer2 },
     { link: "offers", label: "Mes documentations", icon: IconVocabulary },
   ]
-  const companyTabs = [
-    //{ link: "/", label: "Page d'acceuil", icon: IconHome },
-    { link: "createoffer", label: "Poster une offre", icon: IconSquarePlus, highlight: true },
-    { link: "myoffers", label: "Mes offres", icon: IconListDetails },
-    { link: "receivedprojects", label: "Projets reçus", icon: IconBriefcase },
-    //{ link: "companies", label: "Entreprises", icon: IconBuilding },
-  ]
+
+  const form = useForm({
+    validate: {
+      name: (value) => (value.length > 50 ? "Votre titre ne peut pas faire plus de 50 caractères." : null),
+      description: (value) => (value.length > 200 ? "Votre description ne peut pas faire plus de 200 caractères." : null),
+      localPath: (value) => (value.length > 200 ? "Votre titre ne peut pas faire plus de 50 caractères." : null),
+    },
+  })
+
+  async function handleSubmit() {
+    let res = null
+    if (editing) {
+      res = await put(`/project`, { ...form.values, token: user.token, owner: user.id })
+    } else {
+      res = await post(`/project`, { ...form.values, token: user.token, owner: user.id })
+    }
+    if (res) {
+      NotifSuccess(editing ? "Modification enregistrée" : "Projet créé")
+      nextRenderNavigate(`/project/${res._id}`)
+    }
+  }
 
   const toggleColorScheme = () => {
     if (theme.black == "#000") {
@@ -247,7 +266,7 @@ export default function AppShell({ onThemeChange }) {
               </>
             ) : (
               <Group>
-                <Button component={Link} to="home" onClick={close} color="secondary" leftSection={<IconSquarePlus />} variant="transparent" >
+                <Button onClick={() => setModalOpened(true)} color="secondary" leftSection={<IconSquarePlus />} variant="transparent" >
                   Nouveau
                 </Button>
                 {isLargeScreen && (
@@ -348,6 +367,54 @@ export default function AppShell({ onThemeChange }) {
           </Stack>
         </Stack>
       </footer>
+      <Modal
+        opened={modalOpened}
+        onClose={() => setModalOpened(false)}
+        title="Créer un nouveau projet"
+        centred="true"
+      >
+        <form onSubmit={form.onSubmit(() => handleSubmit())}>
+
+          <TextInput
+            mt="md"
+            label="Nom"
+            placeholder="Nom"
+            value={form.values.name}
+            onChange={(event) => form.setFieldValue("name", event.currentTarget.value)}
+            error={form.errors.name}
+          />
+          <TextInput
+            mt="sm"
+            label="Description"
+            placeholder="Description"
+            value={form.values.description}
+            onChange={(event) => form.setFieldValue("description", event.currentTarget.value)}
+            error={form.errors.description}
+          />
+          <Flex align="flex-end">
+            <Box flex="1" mr="sm">
+              <TextInput
+                mt="sm"
+                label="Chemin d'accès"
+                placeholder="Chemin d'accès"
+                value={form.values.localPath}
+                onChange={(event) => form.setFormikState({ localPath: event.currentTarget.value })}
+                error={form.errors.localPath}
+              />
+            </Box>
+            <Button>
+              Choisir
+            </Button>
+          </Flex>
+
+          <Group mt="lg" display="flex" justify="center">
+            <Button type="submit">Créer</Button>
+          </Group>
+
+
+        </form>
+      </Modal >
+
     </>
   )
 }
