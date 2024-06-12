@@ -76,6 +76,10 @@ export default function AppShell({ onThemeChange }) {
     setColorScheme(theme)
   };
 
+  const handleLogout = async () => {
+    close()
+    Logout(setUser, navigate)
+  }
   return (
     <>
       <Drawer size={300} opened={opened} onClose={close} withCloseButton={false}>
@@ -128,18 +132,18 @@ export default function AppShell({ onThemeChange }) {
               )} */}
             </Stack>
           ) : (
-            <>
+            <Stack gap="lg">
               <Button component={Link} to="login" onClick={close} variant="filled">
                 Voir les offres
               </Button>
-              <Button component={Link} to="register" onClick={close} variant="outline">
+              <Button component={Link} to="login" onClick={close} variant="outline">
                 Se connecter
               </Button>
-              <Button component={Link} to="login" onClick={close} variant="filled">
+              <Button component={Link} to="register" onClick={close} variant="filled">
                 Inscription
               </Button>
               <Divider my="sm" mx="xl" />
-            </>
+            </Stack>
           )}
 
           {/* <Divider size="sm" my="lg" color="dark" /> */}
@@ -204,7 +208,7 @@ export default function AppShell({ onThemeChange }) {
               <Button leftSection={<IconSettings />} fullWidth size="compact-sm" component={Link} to="parameters" onClick={close} variant="light" mt="xs">
                 Paramètres
               </Button>
-              <Button leftSection={<IconLogout />} fullWidth color="red" size="compact-sm" onClick={() => Logout(setUser, navigate)} variant="light" mt="xs">
+              <Button leftSection={<IconLogout />} fullWidth color="red" size="compact-sm" onClick={() => handleLogout()} variant="light" mt="xs">
                 Déconnexion
               </Button>
             </>
@@ -218,12 +222,7 @@ export default function AppShell({ onThemeChange }) {
 
             <Link to="/">
               <Image h={35} w="auto" fit="contain" src={theme.black == "#000" ? logo_docmaster : logo_docmaster_light} />          </Link>
-            {isLargeScreen && (
-              <Button component={Link} to="plans" onClick={close} variant="subtle">
-                Voir les plans
-              </Button>
 
-            )}
           </Group>
           <Group>
 
@@ -231,26 +230,39 @@ export default function AppShell({ onThemeChange }) {
               <>
                 {isLargeScreen && (
                   <Group>
-                    <Button component={Link} to="home" onClick={close} variant="outline">
+                    <Button component={Link} to="plans" onClick={close} variant="subtle">
+                      Voir les plans
+                    </Button>
+                    <Button component={Link} to="login" onClick={close} variant="outline">
                       Se connecter
                     </Button>
-                    <Button component={Link} to="home" onClick={close} variant="filled">
+                    <Button component={Link} to="register" onClick={close} variant="filled">
                       Inscription
                     </Button>
-
+                    <Button size="sm" px="10px" onClick={toggleColorScheme}>
+                      {theme.black == "#000" ? <IconSun /> : <IconMoon />}
+                    </Button>
                   </Group>
                 )}
               </>
             ) : (
-              <Button component={Link} to="home" onClick={close} color="secondary" leftSection={<IconSquarePlus />} variant="transparent" >
-                Nouveau
-              </Button>
+              <Group>
+                <Button component={Link} to="home" onClick={close} color="secondary" leftSection={<IconSquarePlus />} variant="transparent" >
+                  Nouveau
+                </Button>
+                {isLargeScreen && (
+
+                  <Button size="sm" px="10px" onClick={toggleColorScheme}>
+                    {theme.black == "#000" ? <IconSun /> : <IconMoon />}
+                  </Button>
+                )}
+
+              </Group>
             )}
 
 
-            {user.token || !isLargeScreen && (
+            {(user.token || !isLargeScreen) && (
               <Burger opened={opened} color="secondary" onClick={toggle} aria-label="Toggle navigation" />
-
             )}
           </Group>
         </Group>

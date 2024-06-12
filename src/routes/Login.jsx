@@ -38,7 +38,7 @@ export default function Login() {
       score: res.score,
       grade: res.grade
     })
-    NotifSuccess("Bienvenue sur XPME", "Vous êtes connecté")
+    NotifSuccess("Bienvenue sur Docmaster", "Vous êtes connecté")
     nextRenderNavigate("/")
   }
 
@@ -46,7 +46,7 @@ export default function Login() {
     <Stack align="center">
       <Paper radius="md" p="xl" m="sm" withBorder w="100%" maw={400}>
         <Text size="lg" fw={500}>
-          Bienvenu sur XPME
+          Bienvenu sur Docmaster
         </Text>
 
         <Stack mb="md" mt="md" align="center">
