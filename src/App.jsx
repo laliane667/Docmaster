@@ -71,6 +71,18 @@ const darkTheme = createTheme({
       '#ffffff',
       '#ffffff',
     ],
+    transparant: [
+      '#ffffff00',
+      '#ffffff00',
+      '#ffffff00',
+      '#ffffff00',
+      '#ffffff00',
+      '#ffffff00',
+      '#ffffff00',
+      '#ffffff00',
+      '#ffffff00',
+      '#ffffff00',
+    ],
   },
   components: {
     Button: {
@@ -166,6 +178,18 @@ const lightTheme = createTheme({
       '#000000',
       '#000000',
       '#000000',
+    ],
+    transparant: [
+      '#ffffff00',
+      '#ffffff00',
+      '#ffffff00',
+      '#ffffff00',
+      '#ffffff00',
+      '#ffffff00',
+      '#ffffff00',
+      '#ffffff00',
+      '#ffffff00',
+      '#ffffff00',
     ],
   },
   components: {

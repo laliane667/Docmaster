@@ -24,6 +24,7 @@ import {
 } from "@tabler/icons-react"
 
 import { CATCH_PHRASE } from "../tools/Constants"
+import { useMediaQuery } from "react-responsive";
 
 import logo_docmaster from "../assets/docmaster.png"
 import logo_docmaster_light from "../assets/docmaster_inverted.png"
@@ -31,6 +32,9 @@ import Parameters from "./Parameters"
 
 export default function AppShell({ onThemeChange }) {
   const theme = useMantineTheme();
+  const isLargeScreen = useMediaQuery(
+    { minDeviceWidth: 1224 }
+  )
   const [ColorScheme, setColorScheme] = useState("dark")
   //console.log(theme.black)
   const user = useUser()
@@ -125,13 +129,16 @@ export default function AppShell({ onThemeChange }) {
             </Stack>
           ) : (
             <>
-              <Button component={Link} to="register" onClick={close}>
+              <Button component={Link} to="login" onClick={close} variant="filled">
+                Voir les offres
+              </Button>
+              <Button component={Link} to="register" onClick={close} variant="outline">
+                Se connecter
+              </Button>
+              <Button component={Link} to="login" onClick={close} variant="filled">
                 Inscription
               </Button>
               <Divider my="sm" mx="xl" />
-              <Button component={Link} to="login" onClick={close}>
-                Connexion
-              </Button>
             </>
           )}
 
@@ -207,24 +214,41 @@ export default function AppShell({ onThemeChange }) {
 
       <header>
         <Group justify="space-between" mx="lg" my={8}>
-          <Link to="/">
-            <Image h={35} w="auto" fit="contain" src={theme.black == "#000" ? logo_docmaster : logo_docmaster_light} />          </Link>
-
           <Group>
-            {!user.token && (
-              <Group>
-                <Button component={Link} to="home" onClick={close} w="fit-content" variant="outline">
-                  Commencer
-                </Button>
-                <Button component={Link} to="plans" onClick={close} w="fit-content" variant="outline">
-                  Plans
-                </Button>
-              </Group>
+
+            <Link to="/">
+              <Image h={35} w="auto" fit="contain" src={theme.black == "#000" ? logo_docmaster : logo_docmaster_light} />          </Link>
+            {isLargeScreen && (
+              <Button component={Link} to="plans" onClick={close} variant="subtle">
+                Voir les plans
+              </Button>
+
             )}
-            <Button size="sm" px="10px" onClick={toggleColorScheme}>
-              {theme.black == "#000" ? <IconSun /> : <IconMoon />}
-            </Button>
-            {user.token && (
+          </Group>
+          <Group>
+
+            {!user.token ? (
+              <>
+                {isLargeScreen && (
+                  <Group>
+                    <Button component={Link} to="home" onClick={close} variant="outline">
+                      Se connecter
+                    </Button>
+                    <Button component={Link} to="home" onClick={close} variant="filled">
+                      Inscription
+                    </Button>
+
+                  </Group>
+                )}
+              </>
+            ) : (
+              <Button component={Link} to="home" onClick={close} color="secondary" leftSection={<IconSquarePlus />} variant="transparent" >
+                Nouveau
+              </Button>
+            )}
+
+
+            {user.token || !isLargeScreen && (
               <Burger opened={opened} color="secondary" onClick={toggle} aria-label="Toggle navigation" />
 
             )}
