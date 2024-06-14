@@ -13,6 +13,7 @@ import useNextRenderNavigate from "../tools/useNextRenderNavigate"
 import { SECTORS } from "../tools/Constants"
 import { useState } from "react"
 import { Grid, /* ...autres imports... */ } from "@mantine/core";
+import { Tabs } from "@mantine/core";
 
 
 import gitHub from "../assets/typeImage/github.png"
@@ -72,10 +73,28 @@ export default function ProjectEditCreate() {
     }
   }
   return (
-    <Flex align="center">
-      <Box flex="1" mr="md">
-        <Stack align="center">
-          <Paper radius="md" p="lg" withBorder w="100%">
+    <Stack align="center">
+      <Paper radius="md" p="lg" withBorder w="600px">
+        {/* <Flex>
+          <Button fullWidth variant="subtle" mt="xs">
+            Aperçu général
+          </Button>
+          <Button fullWidth variant="subtle" mt="xs">
+            Paramètres
+          </Button>
+          <Button fullWidth color="red" variant="subtle" mt="xs">
+            Danger zone
+          </Button>
+
+        </Flex> */}
+        <Tabs defaultValue="general">
+          <Tabs.List>
+            <Tabs.Tab value="general">Aperçu général</Tabs.Tab>
+            <Tabs.Tab value="settings">Paramètres</Tabs.Tab>
+            <Tabs.Tab value="danger">Danger zone</Tabs.Tab>
+          </Tabs.List>
+
+          <Tabs.Panel value="general" pt="xs">
             {projectNotFound ? (
               <Text>Projet non trouvé</Text>
             ) : (
@@ -124,31 +143,28 @@ export default function ProjectEditCreate() {
                       </Button>
                     </Group>
                   </Modal>
-                  <Button fullWidth color="red" size="compact-sm" variant="light" mt="xs" onClick={() => setOpenDeleteModal(true)}>
-                    Supprimer le projet
-                  </Button>
+
                 </Group>
               </form>
             )}
-          </Paper>
-        </Stack>
-      </Box>
-      <Paper radius="md" p="lg" withBorder maw="250px">
-        <Button fullWidth variant="light" mt="xs">
-          Aperçu général
-        </Button>
-        <Button fullWidth variant="light" mt="xs">
-          Paramètres
-        </Button>
-        <Button fullWidth color="red" variant="light" mt="xs">
-          Danger zone
-        </Button>
+          </Tabs.Panel>
+
+          <Tabs.Panel value="settings" pt="xs">
+            {/* Contenu de l'onglet "Paramètres" */}
+          </Tabs.Panel>
+
+          <Tabs.Panel value="danger" pt="xs">
+            <Button fullWidth color="red" size="compact-sm" variant="light" mt="xs" onClick={() => setOpenDeleteModal(true)}>
+              Supprimer le projet
+            </Button>
+          </Tabs.Panel>
+        </Tabs>
+
 
       </Paper>
-    </Flex>
-
-
-
-
+      {/* <Paper radius="md" p="lg" withBorder w="600px">
+        
+      </Paper> */}
+    </Stack>
   )
 }
