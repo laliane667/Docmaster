@@ -7,7 +7,6 @@ import "./css/index.css"
 globalThis.SERVER = import.meta.env.VITE_BACKEND_HOST
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <App />
+
 )

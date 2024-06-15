@@ -59,6 +59,18 @@ const darkTheme = createTheme({
       '#ABC7F8',
       '#ABC7F8',
     ],
+    inverted: [
+      '#2E2E2E',
+      '#2E2E2E',
+      '#2E2E2E',
+      '#2E2E2E',
+      '#2E2E2E',
+      '#2E2E2E',
+      '#2E2E2E',
+      '#2E2E2E',
+      '#2E2E2E',
+      '#2E2E2E',
+    ],
     secondary: [
       '#ffffff',
       '#ffffff',
@@ -87,7 +99,7 @@ const darkTheme = createTheme({
   components: {
     Button: {
       defaultProps: {
-        radius: 'md',
+        radius: 'xl',
         color: 'primary',
         autoContrast: true
       },
@@ -99,7 +111,7 @@ const darkTheme = createTheme({
     },
     Badge: {
       defaultProps: {
-        radius: 'md',
+        radius: 'xl',
         color: 'primary',
         autoContrast: true
       },
@@ -111,17 +123,17 @@ const darkTheme = createTheme({
     },
     TextInput: TextInput.extend({
       defaultProps: {
-        radius: "md",
+        radius: "xl",
       },
     }),
     PasswordInput: PasswordInput.extend({
       defaultProps: {
-        radius: "md",
+        radius: "xl",
       },
     }),
     Radio: Radio.extend({
       defaultProps: {
-        radius: "lg",
+        radius: "xl",
         color: "#fff",
       },
     }),
@@ -167,6 +179,18 @@ const lightTheme = createTheme({
       '#324795',
       '#324795',
     ],
+    inverted: [
+      '#DFDFDF',
+      '#DFDFDF',
+      '#DFDFDF',
+      '#DFDFDF',
+      '#DFDFDF',
+      '#DFDFDF',
+      '#DFDFDF',
+      '#DFDFDF',
+      '#DFDFDF',
+      '#DFDFDF',
+    ],
     secondary: [
       '#000000',
       '#000000',
@@ -195,31 +219,31 @@ const lightTheme = createTheme({
   components: {
     Button: Button.extend({
       defaultProps: {
-        radius: "md",
+        radius: "xl",
         color: "blue",
         color: "#324795",
       },
     }),
     Badge: Button.extend({
       defaultProps: {
-        radius: "md",
+        radius: "xl",
         color: "blue",
         color: "#324795",
       },
     }),
     TextInput: TextInput.extend({
       defaultProps: {
-        radius: "md",
+        radius: "xl",
       },
     }),
     PasswordInput: PasswordInput.extend({
       defaultProps: {
-        radius: "md",
+        radius: "xl",
       },
     }),
     Radio: Radio.extend({
       defaultProps: {
-        radius: "lg",
+        radius: "xl",
         color: "#000",
       },
     }),
@@ -249,9 +273,9 @@ const lightTheme = createTheme({
     Paper: Paper.extend({
       styles: (theme) => ({
         root: {
-          //borderColor: "#000",
-          //backgroundColor: "#fff"
-          backgroundColor: "#fafafa"
+          borderColor: "#131313",
+          backgroundColor: "#f4f4f4"
+          //backgroundColor: "#fafafa"
         },
       }),
     }),

@@ -6,9 +6,9 @@ header {
 
   /* Light theme */
   /* background: "rgb(129,129,129)"; */
-  backdrop-filter: blur(rem(6));
-  border-bottom: solid rem(1) #000000;
-  box-shadow: rgba(0, 0, 0, 0.05) 0 rem(3) rem(6);
+  backdrop-filter: blur(2px);
+  /* border-bottom: solid rem(1) #000000; */
+  /* box-shadow: rgba(0, 0, 0, 0.05) 0 rem(3) rem(6); */
   position: fixed;
   top: 0;
   width: 100%;

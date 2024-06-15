@@ -1,14 +1,14 @@
 import "../css/AppShell.module.css"
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { Modal, Button, Group, Drawer, Burger, Stack, Avatar, Divider, Image, Center, Box, Flex, Text, Tooltip, Anchor, rem, TextInput, useMantineTheme } from "@mantine/core"
+import { Modal, FileInput, Button, Group, Drawer, Burger, Stack, Avatar, Divider, Image, Center, Box, Flex, Text, Tooltip, Anchor, rem, TextInput, useMantineTheme } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks"
 import { useUser, useSetUser } from "../Context"
 import Logout from "../tools/Logout"
 import { Outlet } from "react-router-dom"
 import {
   IconHome,
-  IconBriefcase,
+  IconFileCheck,
   IconServer2,
   IconSquarePlus,
   IconSettings,
@@ -22,6 +22,8 @@ import {
   IconSun,
   IconMoon
 } from "@tabler/icons-react"
+
+import { useRef } from "react";
 
 import { useForm } from "@mantine/form"
 import { put, get, post, del } from "../tools/Request"
@@ -45,6 +47,55 @@ export default function AppShell({ onThemeChange }) {
   const navigate = useNavigate()
   const [opened, { close, toggle }] = useDisclosure(false)
   const [modalOpened, setModalOpened] = useState(false);
+
+
+
+
+  //BIZZare
+  const fileInputRef = useRef(null);
+  const handleChooseClick = () => {
+    fileInputRef.current.click();
+  };
+
+  //Tree
+  const [content, setContent] = useState("");
+  const displayContent = (fullContent) => {
+    let index = 0;
+    const intervalId = setInterval(() => {
+      if (index < fullContent.length - 1) { // Vérifier si l'index est inférieur à la longueur de la chaîne moins un
+        setContent((prevContent) => prevContent + fullContent[index]);
+        index++;
+      } else {
+        clearInterval(intervalId);
+      }
+    }, 25);
+  };
+
+
+  const handleUpload = () => {
+    // ... code pour gérer l'upload du répertoire ...
+
+    // Contenu à afficher (vous devriez générer cela dynamiquement en fonction du répertoire uploadé)
+    const contentToDisplay = `
+  .
+  ├── minecraft
+  │   ├── launch_server.sh
+  │   └── start.sh
+  └── sensors
+      ├── get-temperatures.sh
+      ├── nohup.out
+      ├── start.sh
+      └── temperatures.txt
+    `;
+
+    // Effacer le contenu précédent
+    setContent("");
+
+    // Afficher le nouveau contenu progressivement
+    displayContent(contentToDisplay);
+  };
+
+
 
   const [activeTab, setActiveTab] = useState("/")
 
@@ -105,7 +156,7 @@ export default function AppShell({ onThemeChange }) {
         <Stack gap={0}>
           <Center mb="xl" mt="md">
             <Link to="/">
-              <Image h={50} w="auto" fit="contain" src={theme.black == "#000" ? logo_docmaster : logo_docmaster_light} />
+              <Image h={75} w="auto" fit="contain" src={theme.black == "#000" ? logo_docmaster : logo_docmaster_light} />
             </Link>
           </Center>
           {/* <Group grow>
@@ -372,6 +423,11 @@ export default function AppShell({ onThemeChange }) {
         onClose={() => setModalOpened(false)}
         title="Créer un nouveau projet"
         centred="true"
+        centered
+        overlayProps={{
+          backgroundOpacity: 0.55,
+          blur: 3,
+        }}
       >
         <form onSubmit={form.onSubmit(() => handleSubmit())}>
 
@@ -391,24 +447,47 @@ export default function AppShell({ onThemeChange }) {
             onChange={(event) => form.setFieldValue("description", event.currentTarget.value)}
             error={form.errors.description}
           />
-          <Flex align="flex-end">
+          <Flex align="flex-end" mt="lg">
             <Box flex="1" mr="sm">
-              <TextInput
+              {/* <TextInput
                 mt="sm"
                 label="Chemin d'accès"
                 placeholder="Chemin d'accès"
                 value={form.values.localPath}
                 onChange={(event) => form.setFormikState({ localPath: event.currentTarget.value })}
                 error={form.errors.localPath}
+              /> */}
+              <FileInput
+                className={false ? "file-selected" : "file-not-selected"}
+                /* label={fa ? (filePath ? (
+                  <Group><IconArchive color="green" /><Text>Fichié enregistré</Text></Group>
+                ) : (
+                  <Group><IconCheck color="green" /><Text>Fichié chargé</Text></Group>
+                )) : (
+                  <Group><IconFileUpload color="grey" /><Text>Charger un fichier</Text></Group>
+                )} */
+                placeholder="Aucun répertoire choisi"
+                //value={selectedFile || undefined}
+                onClick={handleChooseClick}
+                //onChange={handleChooseClick}
+                //rightSection={true && <IconFileCheck color="grey" />}
+                error={null}
+              //disabled={!selectedFile ? false : report ? (report.shared ? true : false) : false}
               />
             </Box>
-            <Button>
+            <input style={{ height: '0', width: '0' }} ref={fileInputRef} directory="" webkitdirectory="" type="file" />
+
+            <Button onClick={handleChooseClick}>
               Choisir
             </Button>
           </Flex>
 
+          <div>
+            <pre>{content}</pre>
+
+          </div>
           <Group mt="lg" display="flex" justify="center">
-            <Button type="submit">Créer</Button>
+            <Button type="submit" onClick={handleUpload}>Créer</Button>
           </Group>
 
 

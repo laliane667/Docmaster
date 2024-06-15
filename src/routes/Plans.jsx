@@ -51,15 +51,15 @@ export default function Plans() {
                   Acheter une doc
                 </Title>
                 <Divider my="md" />
-                <Text fw={600} mb="md">
-                  Description sur mesure, <br />Prix sur mesure.
+                <Text fw={600} mb="md" size="lg">
+                  Description sur mesure, prix sur mesure.
                 </Text>
 
-                <Text mb="md">
+                <Text mb="md" size="md" fw="200">
                   Idéal pour tester sur des projets de compléxité moyenne à basse.
                 </Text>
 
-                <Text mb="md">
+                <Text mb="md" size="xs">
                   Chargez votre projet pour obtenir le prix de la documentation.
                 </Text>
                 <Button>
