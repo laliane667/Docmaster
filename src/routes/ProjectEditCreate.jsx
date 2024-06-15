@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 
 import { Card, Title, rem, Divider, Center, Image, Badge } from "@mantine/core";
 import { TextInput, Text, Paper, Group, Button, Switch, Stack, Flex, Box, FileInput, NumberInput, Modal } from "@mantine/core"
-import { IconFileCheck, IconFileUpload, IconEdit, IconCalendar, IconTrendingUp, IconVocabulary, IconListNumbers } from "@tabler/icons-react";
+import { IconFileCheck, IconFileUpload, IconEdit, IconCalendar, IconTrendingUp, IconVocabulary, IconSearch } from "@tabler/icons-react";
 
 import { DatePickerInput } from "@mantine/dates"
 import { useForm } from "@mantine/form"
@@ -31,12 +31,45 @@ export async function loaderCreateEditProject(params) {
 }
 export default function ProjectEditCreate() {
   const [projectSwitch, setProjectSwitch] = useState(false);
+  const [nameChanged, setNameChanged] = useState(false);
   const [documentationSwitch, setDocumentationSwitch] = useState(false);
-
+  let test = "Test"
+  const [rootName, setRootName] = useState(null);
+  const [selectedDirectory, setSelectedDirectory] = useState(null);
   const fileInputRef = useRef(null);
   const handleChooseClick = () => {
     fileInputRef.current.click();
   };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    const directoryPath = file.webkitRelativePath || file.name;
+    const directoryName = directoryPath.split("/")[0];
+    setRootName(directoryName)
+    //console.log("Updated directory : " + directoryName);
+    setSelectedDirectory(event.target.files)
+  };
+
+  const handleSave = async () => {
+    await handleFileSubmit();
+  };
+
+
+  const handleFileSubmit = async () => {
+
+    const formData = new FormData();
+    formData.append("id", project._id);
+    if (selectedDirectory) {
+      formData.append("file", selectedDirectory);
+    }
+
+    if (project._id) {
+      const response = await fileUpload("/project/upload", {}, formData);
+    }
+    localStorage.setItem('fileAdded', true); // Stocke un état temporaire dans localStorage
+    window.location.assign(window.location.pathname); // Recharge la page actuelle
+  };
+
 
   //Tree
 
@@ -225,7 +258,7 @@ export default function ProjectEditCreate() {
           </Tabs.Panel>
 
           <Tabs.Panel value="settings">
-            <input style={{ opacity: '0', height: '0', width: "0" }} ref={fileInputRef} directory="" webkitdirectory="" type="file" />
+            <input onChange={handleFileChange} style={{ opacity: '0', height: '0', width: "0" }} ref={fileInputRef} directory="" webkitdirectory="" type="file" />
             <Stack maw={isLargeScreen ? "100%" : "55vw"} px="xs">
               <Text size="lg" fw={500}>
                 Général
@@ -235,12 +268,15 @@ export default function ProjectEditCreate() {
                   <Group align="flex-end">
                     <TextInput
                       label="Nom du projet"
+                      w="50%"
                       placeholder="Nom"
                       value={form.values.name}
                       onChange={(event) => form.setFieldValue("name", event.currentTarget.value)}
                       error={form.errors.name}
                     />
-                    <Button>Renomer</Button>
+                    {nameChanged && (
+                      <Button>Renomer</Button>
+                    )}
 
                   </Group>
 
@@ -249,25 +285,35 @@ export default function ProjectEditCreate() {
 
               </form>
               <Divider mx="xl" fw="xs" />
-
+              <Text size="lg" fw={500}>
+                Emplacement du projet
+              </Text>
               <Group wrap={isLargeScreen ? "nowrap" : "wrap"}>
+
+
                 <FileInput
-
-                  placeholder="Aucun répertoire choisi"
-                  //value={selectedFile || undefined}
-                  onClick={handleChooseClick}
-                  //onChange={handleChooseClick}
-                  rightSection={true && <IconFileCheck color="grey" />}
+                  w="50%"
+                  placeholder={selectedDirectory ? rootName : "Aucun répertoire choisi"}
+                  onChange={handleFileChange}
+                  rightSection={selectedDirectory ? <IconFileCheck color="green" /> : null}
                   error={null}
-                //disabled={!selectedFile ? false : report ? (report.shared ? true : false) : false}
+                  radius="xl"
+                  styles={{ input: { cursor: "pointer" } }}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    fileInputRef.current.click();
+                  }}
                 />
-
-                <Button variant="subtle" onClick={handleChooseClick}>
-                  Choisir
-                </Button>
-                <Button variant="light" onClick={handleUpload}>
+                <Button variant="light" w="fit-content" px="5px" mr="0" onClick={handleChooseClick}><IconSearch /></Button>
+                <Button onClick={handleUpload}>
                   Enregistrer
                 </Button>
+                <Button variant="subtle" c="red" onClick={handleChooseClick}>
+                  Supprimer
+                </Button>
+
+              </Group>
+              <Group grow>
               </Group>
               <pre>{content}</pre>
               <Group mt="xs">
