@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react"
 
 import { Card, Title, rem, Divider, Center, Image, Badge } from "@mantine/core";
-import { TextInput, Text, Paper, Group, Button, Textarea, Stack, Flex, Box, FileInput, NumberInput, Modal } from "@mantine/core"
+import { TextInput, Text, Paper, Group, Button, Switch, Stack, Flex, Box, FileInput, NumberInput, Modal } from "@mantine/core"
 import { IconFileCheck, IconFileUpload, IconEdit, IconCalendar, IconTrendingUp, IconVocabulary, IconListNumbers } from "@tabler/icons-react";
 
 import { DatePickerInput } from "@mantine/dates"
@@ -30,6 +30,9 @@ export async function loaderCreateEditProject(params) {
   return { project, projectId: params && params.id }
 }
 export default function ProjectEditCreate() {
+  const [projectSwitch, setProjectSwitch] = useState(false);
+  const [documentationSwitch, setDocumentationSwitch] = useState(false);
+
   const fileInputRef = useRef(null);
   const handleChooseClick = () => {
     fileInputRef.current.click();
@@ -201,14 +204,12 @@ export default function ProjectEditCreate() {
               <Tabs.Tab value="general">Aperçu général</Tabs.Tab>
               <Tabs.Tab value="documentation">Documentation</Tabs.Tab>
               <Tabs.Tab value="settings">Paramètres</Tabs.Tab>
-              <Tabs.Tab value="danger">Danger zone</Tabs.Tab>
             </Tabs.List>
           ) : (
             <Tabs.List>
               <Tabs.Tab value="general">Aperçu général</Tabs.Tab>
               <Tabs.Tab value="documentation">Documentation</Tabs.Tab>
               <Tabs.Tab value="settings">Paramètres</Tabs.Tab>
-              <Tabs.Tab value="danger">Danger zone</Tabs.Tab>
             </Tabs.List>
           )}
 
@@ -217,94 +218,104 @@ export default function ProjectEditCreate() {
             {projectNotFound ? (
               <Text>Projet non trouvé</Text>
             ) : (
-              <form onSubmit={form.onSubmit(() => handleSubmit())}>
-                <Text size="lg" fw={500}>
-                  {editing ? "Modifier le projet" : "Créer un projet"}
-                </Text>
-                <Stack mt="sm" gap="xs">
-                  <TextInput
-                    label="Nom"
-                    placeholder="Nom"
-                    value={form.values.name}
-                    onChange={(event) => form.setFieldValue("name", event.currentTarget.value)}
-                    error={form.errors.name}
-                  />
-                  <Textarea
-                    label="Description"
-                    placeholder="Description"
-                    value={form.values.description}
-                    onChange={(event) => form.setFieldValue("description", event.currentTarget.value)}
-                    error={form.errors.description}
-                    autosize
-                    minRows={3}
-                  />
-
-                </Stack>
-                <Group justify="space-between" mt="xl">
-                  <Button onClick={() => handleCancel()}>Annuler</Button>
-                  <Button type="submit">{editing ? "Modifier" : "Créer"}</Button>
-                </Group>
-                <Group justify="space-between" mt="xl">
-                  <Modal
-                    opened={openDeleteModal}
-                    onClose={() => setOpenDeleteModal(false)}
-                    withCloseButton={false}
-                    centered
-                    overlayProps={{
-                      backgroundOpacity: 0.55,
-                      blur: 3,
-                    }}>
-                    <Text>Êtes-vous sûr de vouloir supprimer ce projet ?</Text>
-                    <Group mt="lg" justify="space-between">
-                      <Button onClick={() => setOpenDeleteModal(false)}>Annuler</Button>
-                      <Button color="red" onClick={() => handleDelete()}>
-                        Supprimer
-                      </Button>
-                    </Group>
-                  </Modal>
-
-                </Group>
-              </form>
+              <Text>
+                OKOK
+              </Text>
             )}
           </Tabs.Panel>
 
-          <Tabs.Panel value="settings" pt="xs">
-            {/* Contenu de l'onglet "Paramètres" */}
-          </Tabs.Panel>
-
-          <Tabs.Panel value="danger" pt="xs">
-
+          <Tabs.Panel value="settings">
             <input style={{ opacity: '0', height: '0', width: "0" }} ref={fileInputRef} directory="" webkitdirectory="" type="file" />
             <Stack maw={isLargeScreen ? "100%" : "55vw"} px="xs">
-              <FileInput
+              <Text size="lg" fw={500}>
+                Général
+              </Text>
+              <form onSubmit={form.onSubmit(() => handleSubmit())}>
+                <Stack>
+                  <Group align="flex-end">
+                    <TextInput
+                      label="Nom du projet"
+                      placeholder="Nom"
+                      value={form.values.name}
+                      onChange={(event) => form.setFieldValue("name", event.currentTarget.value)}
+                      error={form.errors.name}
+                    />
+                    <Button>Renomer</Button>
 
-                placeholder="Aucun répertoire choisi"
-                //value={selectedFile || undefined}
-                onClick={handleChooseClick}
-                //onChange={handleChooseClick}
-                rightSection={true && <IconFileCheck color="grey" />}
-                error={null}
-              //disabled={!selectedFile ? false : report ? (report.shared ? true : false) : false}
-              />
-              <Group wrap="nowrap">
-                <Button variant="subtle" p="0" onClick={handleChooseClick}>
+                  </Group>
+
+                </Stack>
+
+
+              </form>
+              <Divider mx="xl" fw="xs" />
+
+              <Group wrap={isLargeScreen ? "nowrap" : "wrap"}>
+                <FileInput
+
+                  placeholder="Aucun répertoire choisi"
+                  //value={selectedFile || undefined}
+                  onClick={handleChooseClick}
+                  //onChange={handleChooseClick}
+                  rightSection={true && <IconFileCheck color="grey" />}
+                  error={null}
+                //disabled={!selectedFile ? false : report ? (report.shared ? true : false) : false}
+                />
+
+                <Button variant="subtle" onClick={handleChooseClick}>
                   Choisir
                 </Button>
-                <Button variant="subtle" p="0" onClick={handleUpload}>
+                <Button variant="light" onClick={handleUpload}>
                   Enregistrer
                 </Button>
               </Group>
+              <pre>{content}</pre>
+              <Group mt="xs">
+                <Text>Projet</Text>
+                <Switch checked={projectSwitch} onChange={(event) => setProjectSwitch(event.currentTarget.checked)} />
+                <Button onClick={() => { /* ... code pour gérer le clic sur le bouton "Modifier" ... */ }}>Modifier</Button>
+              </Group>
+              <Group mt="xs">
+                <Text>Documentation</Text>
+                <Switch checked={documentationSwitch} onChange={(event) => setDocumentationSwitch(event.currentTarget.checked)} />
+                <Button onClick={() => { /* ... code pour gérer le clic sur le bouton "Modifier" ... */ }}>Modifier</Button>
+              </Group>
+
+
+              <Divider />
+              <Text size="lg" fw={500}>
+                Danger zone
+              </Text>
               <Button color="red" variant="light" onClick={() => setOpenDeleteModal(true)}>
                 Supprimer le projet
               </Button>
             </Stack>
-            <pre>{content}</pre>
+
+
 
           </Tabs.Panel>
         </Tabs>
 
 
       </Paper>
+      <Modal
+        opened={openDeleteModal}
+        onClose={() => setOpenDeleteModal(false)}
+        withCloseButton={false}
+        centered
+        overlayProps={{
+          backgroundOpacity: 0.55,
+          blur: 3,
+        }}>
+        <Text>Êtes-vous sûr de vouloir supprimer ce projet ?</Text>
+        <Group mt="lg" justify="space-between">
+          <Button onClick={() => setOpenDeleteModal(false)}>Annuler</Button>
+          <Button color="red" onClick={() => handleDelete()}>
+            Supprimer
+          </Button>
+        </Group>
+      </Modal>
     </Stack>
+
   )
 }

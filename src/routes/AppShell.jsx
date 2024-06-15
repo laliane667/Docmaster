@@ -101,14 +101,14 @@ export default function AppShell({ onThemeChange }) {
 
   const tabs = [
     //{ link: "/", label: "Page d'acceuil", icon: IconHome },
-    { link: "projectcreate", label: "Nouveau", icon: IconSquarePlus, variant: "outline" },
+    //{ link: "projectcreate", label: "Nouveau", icon: IconSquarePlus, variant: "outline" },
     { link: "projects", label: "Mes projets", icon: IconList },
     //{ link: "parameters", label: "Paramètres", icon: IconSettings },
     //{ link: "explore", label: "Explore", icon: IconList },
     //{ link: "plans", label: "Plans", icon: IconList },
   ]
   const doctabs = [
-    { link: "servers", label: "Mes servers", icon: IconServer2 },
+    //{ link: "servers", label: "Mes servers", icon: IconServer2 },
     { link: "offers", label: "Mes documentations", icon: IconVocabulary },
   ]
 
@@ -237,11 +237,12 @@ export default function AppShell({ onThemeChange }) {
                       radius="sm"
                       p="sm"
                       h="auto"
+                      mt="sm"
                     >
                       {tab.label}
                     </Button>
                   ))}
-                  <Divider size="sm" my="lg" color="dark" />
+                  <Divider size="sm" mb="lg" color="dark" />
 
                   <Stack gap={2}>
                     {tabs.map((tab) => (
@@ -260,12 +261,12 @@ export default function AppShell({ onThemeChange }) {
                         radius="sm"
                         p="sm"
                         h="auto"
-                        mb="sm"
+                        mt="sm"
                       >
                         {tab.label}
                       </Button>
                     ))}
-                    <Divider size="sm" my="lg" color="dark" />
+                    <Divider size="sm" mb="lg" color="dark" />
 
                   </Stack>
 
