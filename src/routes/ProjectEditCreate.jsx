@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 
 import { Card, Title, rem, Divider, Center, Image, Badge } from "@mantine/core";
 import { TextInput, Text, Paper, Group, Button, Switch, Stack, Flex, Box, FileInput, NumberInput, Modal } from "@mantine/core"
-import { IconFileCheck, IconFileUpload, IconEdit, IconCalendar, IconTrendingUp, IconVocabulary, IconSearch } from "@tabler/icons-react";
+import { IconFileCheck, IconFileUpload, IconEdit, IconCalendar, IconTrendingUp, IconChevronRight, IconSearch } from "@tabler/icons-react";
 
 import { DatePickerInput } from "@mantine/dates"
 import { useForm } from "@mantine/form"
@@ -135,7 +135,7 @@ export default function ProjectEditCreate() {
         const folder = contentToDisplay[index];
 
         const folderElement = (
-          <Group bg="inverted" w="fit-content" my="0" style={{ borderRadius: "0.5rem", border: "solid #131313 0.1px", alignItems: "flex-start" }}>
+          <Group bg="inverted" w="fit-content" mb="2px" style={{ borderRadius: "0.5rem", alignItems: "flex-start" }}>
             <Text mt="3px" ml="0.5rem">49</Text>
             <details key={folder.name}>
               <Summary name={folder.name} />
@@ -259,79 +259,113 @@ export default function ProjectEditCreate() {
 
           <Tabs.Panel value="settings">
             <input onChange={handleFileChange} style={{ opacity: '0', height: '0', width: "0" }} ref={fileInputRef} directory="" webkitdirectory="" type="file" />
-            <Stack maw={isLargeScreen ? "100%" : "55vw"} px="xs">
-              <Text size="lg" fw={500}>
-                Général
-              </Text>
+            <Stack maw={isLargeScreen ? "100%" : "55vw"} px="xs" >
+              <Group >
+                <Text size="lg" fw={500}>
+                  Général
+                </Text>
+                <Button color="secondary" variant="transparent"><IconChevronRight style={{ transform: "rotate(90deg)" }} /></Button>
+              </Group>
               <form onSubmit={form.onSubmit(() => handleSubmit())}>
-                <Stack>
-                  <Group align="flex-end">
+                <Stack px="xl" gap="xl">
+
+                  <Stack gap="0">
+                    <Text mb="sm">Nom du projet :</Text>
                     <TextInput
-                      label="Nom du projet"
+                      //label="Nom du projet"
                       w="50%"
                       placeholder="Nom"
                       value={form.values.name}
                       onChange={(event) => form.setFieldValue("name", event.currentTarget.value)}
                       error={form.errors.name}
                     />
-                    {nameChanged && (
-                      <Button>Renomer</Button>
-                    )}
+                  </Stack>
 
+
+                  <Stack gap="0">
+                    <Text mb="sm">Services activés :</Text>
+
+                    <Group justify="space-between">
+                      <Group>
+                        <Text>Documentation</Text>
+                        <Switch checked={projectSwitch} onChange={(event) => setProjectSwitch(event.currentTarget.checked)} />
+                      </Group>
+                      <Button color="secondary" variant="transparent"><IconChevronRight /></Button>
+                    </Group>
+                    <Divider color="inverted" />
+
+                    <Group justify="space-between">
+                      <Group>
+                        <Text>Suivi de projet</Text>
+                        <Switch checked={projectSwitch} onChange={(event) => setProjectSwitch(event.currentTarget.checked)} />
+                      </Group>
+                      <Button color="secondary" variant="transparent"><IconChevronRight /></Button>
+                    </Group>
+                    <Divider color="inverted" />
+                  </Stack>
+
+                  <Group align="center" w="100%">
+                    <Button w="fit-content" mx="auto" onClick={handleUpload}>
+                      Enregistrer les modifications
+                    </Button>
                   </Group>
-
                 </Stack>
 
 
               </form>
-              <Divider mx="xl" fw="xs" />
-              <Text size="lg" fw={500}>
-                Emplacement du projet
-              </Text>
-              <Group wrap={isLargeScreen ? "nowrap" : "wrap"}>
+              <Divider my="lg" size={1} color="secondary" style={{ flexGrow: "1" }} />
 
-
-                <FileInput
-                  w="50%"
-                  placeholder={selectedDirectory ? rootName : "Aucun répertoire choisi"}
-                  onChange={handleFileChange}
-                  rightSection={selectedDirectory ? <IconFileCheck color="green" /> : null}
-                  error={null}
-                  radius="xl"
-                  styles={{ input: { cursor: "pointer" } }}
-                  onClick={(event) => {
-                    event.preventDefault();
-                    fileInputRef.current.click();
-                  }}
-                />
-                <Button variant="light" w="fit-content" px="5px" mr="0" onClick={handleChooseClick}><IconSearch /></Button>
-                <Button onClick={handleUpload}>
-                  Enregistrer
-                </Button>
-                <Button variant="subtle" c="red" onClick={handleChooseClick}>
-                  Supprimer
-                </Button>
-
-              </Group>
-              <Group grow>
-              </Group>
-              <pre>{content}</pre>
-              <Group mt="xs">
-                <Text>Projet</Text>
-                <Switch checked={projectSwitch} onChange={(event) => setProjectSwitch(event.currentTarget.checked)} />
-                <Button onClick={() => { /* ... code pour gérer le clic sur le bouton "Modifier" ... */ }}>Modifier</Button>
-              </Group>
-              <Group mt="xs">
-                <Text>Documentation</Text>
-                <Switch checked={documentationSwitch} onChange={(event) => setDocumentationSwitch(event.currentTarget.checked)} />
-                <Button onClick={() => { /* ... code pour gérer le clic sur le bouton "Modifier" ... */ }}>Modifier</Button>
+              <Group >
+                <Text size="lg" fw={500}>
+                  Emplacement du projet
+                </Text>
+                <Button color="secondary" variant="transparent"><IconChevronRight /></Button>
               </Group>
 
+              <Stack px="xl" wrap={isLargeScreen ? "nowrap" : "wrap"}>
+                <Group>
 
-              <Divider />
-              <Text size="lg" fw={500}>
-                Danger zone
-              </Text>
+                  <FileInput
+                    w="50%"
+                    placeholder={selectedDirectory ? rootName : "Aucun répertoire choisi"}
+                    onChange={handleFileChange}
+                    rightSection={selectedDirectory ? <IconFileCheck color="green" /> : null}
+                    error={null}
+                    radius="xl"
+                    styles={{ input: { cursor: "pointer" } }}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      fileInputRef.current.click();
+                    }}
+                  />
+                  {selectedDirectory ? (
+                    <Button w="fit-content" onClick={handleChooseClick}>Enregister</Button>
+                  ) : (
+                    <Button variant="light" w="fit-content" px="5px" mr="0" onClick={handleChooseClick}><IconSearch /></Button>
+                  )}
+                  <Button variant="subtle" c="red" onClick={handleChooseClick}>
+                    Supprimer
+                  </Button>
+                </Group>
+
+                <pre>{content}</pre>
+                <Group align="center" w="100%">
+                  <Button w="fit-content" mx="auto" onClick={handleUpload}>
+                    Enregistrer les modifications
+                  </Button>
+                </Group>
+
+              </Stack>
+              <Divider my="lg" size={1} color="secondary" style={{ flexGrow: "1" }} />
+
+
+
+              <Group >
+                <Text size="lg" fw={500}>
+                  Danger zone
+                </Text>
+                <Button color="secondary" variant="transparent"><IconChevronRight style={{ transform: "rotate(90deg)" }} /></Button>
+              </Group>
               <Button color="red" variant="light" onClick={() => setOpenDeleteModal(true)}>
                 Supprimer le projet
               </Button>

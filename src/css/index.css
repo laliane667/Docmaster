@@ -62,7 +62,7 @@ details[open] > summary {
 
 details {
   width: fit-content;
-  padding: 3px 0.5rem;
+  padding: 2px 0.5rem;
 }
 
 details[open] > summary {
