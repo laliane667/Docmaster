@@ -51,6 +51,7 @@ export default function ProfilPublic() {
               {profil.description}
             </Text>
           </Stack>
+          {/* <Text bg="#7fb6a4">Test</Text> */}
           {profil._id === user.id && (
             <Button variant="light" fullWidth onClick={() => navigate(`/profil/edit`)} style={{ marginTop: rem(20) }}>
               Modifier mon profil

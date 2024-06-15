@@ -66,11 +66,7 @@ export async function del(url, params, serverURL = globalThis.SERVER) {
   }
   return res.data
 }
-
 export async function fileUpload(url, params, formData, serverURL = globalThis.SERVER) {
-  formData.append("type", params.type)
-  formData.append("secret", params.secret)
-
   console.log("fileUpload called with:");
   console.log("URL:", url);
   console.log("Params:", params);
@@ -80,10 +76,10 @@ export async function fileUpload(url, params, formData, serverURL = globalThis.S
       method: "POST",
       body: formData,
     })
-  ).json()
+  ).json();
   if (res.error) {
-    NotifError("Erreur", res.error)
-    return null
+    NotifError("Erreur", res.error);
+    return null;
   }
-  return res.data
+  return res.data;
 }

@@ -8,7 +8,7 @@ import { IconFileCheck, IconFileUpload, IconEdit, IconCalendar, IconTrendingUp, 
 import { DatePickerInput } from "@mantine/dates"
 import { useForm } from "@mantine/form"
 import { useUser } from "../Context"
-import { put, get, post, del } from "../tools/Request"
+import { put, get, post, del, fileUpload } from "../tools/Request"
 import { useLoaderData } from "react-router-dom"
 import { NotifInfo, NotifSuccess } from "../components/Notification"
 import useNextRenderNavigate from "../tools/useNextRenderNavigate"
@@ -54,21 +54,23 @@ export default function ProjectEditCreate() {
     await handleFileSubmit();
   };
 
-
   const handleFileSubmit = async () => {
-
     const formData = new FormData();
     formData.append("id", project._id);
     if (selectedDirectory) {
-      formData.append("file", selectedDirectory);
+      console.log("Selected directory size : " + selectedDirectory.length);
+      for (let i = 0; i < selectedDirectory.length; i++) {
+        formData.append("file", selectedDirectory[i]);
+      }
     }
 
     if (project._id) {
       const response = await fileUpload("/project/upload", {}, formData);
     }
-    localStorage.setItem('fileAdded', true); // Stocke un état temporaire dans localStorage
+    localStorage.setItem("fileAdded", true); // Stocke un état temporaire dans localStorage
     window.location.assign(window.location.pathname); // Recharge la page actuelle
   };
+
 
 
   //Tree
@@ -154,33 +156,8 @@ export default function ProjectEditCreate() {
       } else {
         clearInterval(intervalId);
       }
-    }, 350); // Ajustez ce délai pour contrôler la vitesse d'affichage
+    }, 350);
   };
-
-
-  /* displayContent(
-    [
-      {
-        name: 'minecraft',
-        type: 'folder',
-        children: [
-          { name: 'launch_server.sh' },
-          { name: 'start.sh' },
-        ],
-      },
-      {
-        name: 'sensors',
-        type: 'folder',
-        children: [
-          { name: 'get-temperatures.sh' },
-          { name: 'nohup.out' },
-          { name: 'start.sh' },
-          { name: 'temperatures.txt' },
-        ],
-      },
-    ]) */
-
-
 
   const { project, projectId } = useLoaderData()
   const editing = project ? true : false
@@ -272,7 +249,6 @@ export default function ProjectEditCreate() {
                   <Stack gap="0">
                     <Text mb="sm">Nom du projet :</Text>
                     <TextInput
-                      //label="Nom du projet"
                       w="50%"
                       placeholder="Nom"
                       value={form.values.name}
@@ -280,7 +256,6 @@ export default function ProjectEditCreate() {
                       error={form.errors.name}
                     />
                   </Stack>
-
 
                   <Stack gap="0">
                     <Text mb="sm">Services activés :</Text>
@@ -339,7 +314,7 @@ export default function ProjectEditCreate() {
                     }}
                   />
                   {selectedDirectory ? (
-                    <Button w="fit-content" onClick={handleChooseClick}>Enregister</Button>
+                    <Button w="fit-content" onClick={handleSave}>Enregister</Button>
                   ) : (
                     <Button variant="light" w="fit-content" px="5px" mr="0" onClick={handleChooseClick}><IconSearch /></Button>
                   )}
