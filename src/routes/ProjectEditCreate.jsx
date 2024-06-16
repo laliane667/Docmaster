@@ -57,11 +57,12 @@ export default function ProjectEditCreate() {
   const handleFileSubmit = async () => {
     const formData = new FormData();
     formData.append("id", project._id);
-    if (selectedDirectory) {
-      console.log("Selected directory size : " + selectedDirectory.length);
-      for (let i = 0; i < selectedDirectory.length; i++) {
-        formData.append("file", selectedDirectory[i]);
-      }
+
+    // Ajoutez les fichiers à formData avec leur chemin d'accès relatif
+    for (let i = 0; i < selectedDirectory.length; i++) {
+      const file = selectedDirectory[i];
+      const relativePath = file.webkitRelativePath || file.mozFullPath || file.name;
+      formData.append(relativePath, file);
     }
 
     if (project._id) {
@@ -70,6 +71,7 @@ export default function ProjectEditCreate() {
     localStorage.setItem("fileAdded", true); // Stocke un état temporaire dans localStorage
     window.location.assign(window.location.pathname); // Recharge la page actuelle
   };
+
 
 
 
