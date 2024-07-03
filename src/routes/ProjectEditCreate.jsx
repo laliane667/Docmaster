@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react"
 
 import { Card, Title, rem, Divider, Center, Image, Badge } from "@mantine/core";
-import { TextInput, Text, Paper, Group, Button, Switch, Stack, Flex, Box, FileInput, NumberInput, Modal } from "@mantine/core"
+import { TextInput, Text, Paper, Group, Button, Switch, Stack, Accordion, Flex, Box, FileInput, NumberInput, Modal } from "@mantine/core"
 import { IconFileCheck, IconFileUpload, IconEdit, IconCalendar, IconTrendingUp, IconChevronRight, IconSearch } from "@tabler/icons-react";
 
 import { DatePickerInput } from "@mantine/dates"
@@ -20,6 +20,7 @@ import { useRef } from "react";
 import { useMediaQuery } from "react-responsive";
 
 import gitHub from "../assets/typeImage/github.png"
+import styles from '../css/ProjectEditCreate.module.css';
 
 export async function loaderCreateEditProject(params) {
   let project = null
@@ -239,57 +240,129 @@ export default function ProjectEditCreate() {
           <Tabs.Panel value="settings">
             <input onChange={handleFileChange} style={{ opacity: '0', height: '0', width: "0" }} ref={fileInputRef} directory="" webkitdirectory="" type="file" />
             <Stack maw={isLargeScreen ? "100%" : "55vw"} px="xs" >
+              <Accordion defaultValue="general">
+                <Accordion.Item value="general">
+                  <Accordion.Control
+                    className={`${styles.accordionControlClassnames} ${accordion.getValue() === "general" ? styles.active : ""
+                      }`}
+                  >
+
+
+
+                    <Text style={{ width: "fit-content" }}>Général</Text>
+                  </Accordion.Control>
+                  <Accordion.Panel>
+                    <form onSubmit={form.onSubmit(() => handleSubmit())}>
+                      <Stack px="xl" py="md" gap="xl">
+
+                        <Stack gap="0">
+                          <Text mb="sm">Nom du projet :</Text>
+                          <TextInput
+                            w="50%"
+                            placeholder="Nom"
+                            value={form.values.name}
+                            onChange={(event) => form.setFieldValue("name", event.currentTarget.value)}
+                            error={form.errors.name}
+                          />
+                        </Stack>
+
+                        <Stack gap="0">
+                          <Text mb="sm">Services activés :</Text>
+
+                          <Group justify="space-between">
+                            <Group>
+                              <Text>Documentation</Text>
+                              <Switch checked={projectSwitch} onChange={(event) => setProjectSwitch(event.currentTarget.checked)} />
+                            </Group>
+                            <Button color="secondary" variant="transparent"><IconChevronRight /></Button>
+                          </Group>
+                          <Divider color="inverted" />
+
+                          <Group justify="space-between">
+                            <Group>
+                              <Text>Suivi de projet</Text>
+                              <Switch checked={projectSwitch} onChange={(event) => setProjectSwitch(event.currentTarget.checked)} />
+                            </Group>
+                            <Button color="secondary" variant="transparent"><IconChevronRight /></Button>
+                          </Group>
+                          <Divider color="inverted" />
+                        </Stack>
+
+                        <Group align="center" w="100%">
+                          <Button w="fit-content" mx="auto" onClick={handleUpload}>
+                            Enregistrer les modifications
+                          </Button>
+                        </Group>
+                      </Stack>
+
+
+                    </form>
+                  </Accordion.Panel>
+                </Accordion.Item>
+
+                <Accordion.Item value="location">
+                  <Accordion.Control>
+                    Emplacement du projet
+                  </Accordion.Control>
+                  <Accordion.Panel>
+                    <Stack px="xl" wrap={isLargeScreen ? "nowrap" : "wrap"}>
+                      <Group>
+
+                        <FileInput
+                          w="50%"
+                          placeholder={selectedDirectory ? rootName : "Aucun répertoire choisi"}
+                          onChange={handleFileChange}
+                          rightSection={selectedDirectory ? <IconFileCheck color="green" /> : null}
+                          error={null}
+                          radius="xl"
+                          styles={{ input: { cursor: "pointer" } }}
+                          onClick={(event) => {
+                            event.preventDefault();
+                            fileInputRef.current.click();
+                          }}
+                        />
+                        {selectedDirectory ? (
+                          <Button w="fit-content" onClick={handleSave}>Enregister</Button>
+                        ) : (
+                          <Button variant="light" w="fit-content" px="5px" mr="0" onClick={handleChooseClick}><IconSearch /></Button>
+                        )}
+                        <Button variant="subtle" c="red" onClick={handleChooseClick}>
+                          Supprimer
+                        </Button>
+                      </Group>
+
+                      <pre>{content}</pre>
+                      <Group align="center" w="100%">
+                        <Button w="fit-content" mx="auto" onClick={handleUpload}>
+                          Enregistrer les modifications
+                        </Button>
+                      </Group>
+
+                    </Stack>
+                  </Accordion.Panel>
+                </Accordion.Item>
+
+                <Accordion.Item value="danger">
+                  <Accordion.Control>
+                    Danger zone
+                  </Accordion.Control>
+                  <Accordion.Panel>
+                    <Button color="red" variant="light" onClick={() => setOpenDeleteModal(true)}>
+                      Supprimer le projet
+                    </Button>
+                  </Accordion.Panel>
+                </Accordion.Item>
+              </Accordion>
+
+
+              {/* 
               <Group >
                 <Text size="lg" fw={500}>
                   Général
                 </Text>
                 <Button color="secondary" variant="transparent"><IconChevronRight style={{ transform: "rotate(90deg)" }} /></Button>
               </Group>
-              <form onSubmit={form.onSubmit(() => handleSubmit())}>
-                <Stack px="xl" gap="xl">
 
-                  <Stack gap="0">
-                    <Text mb="sm">Nom du projet :</Text>
-                    <TextInput
-                      w="50%"
-                      placeholder="Nom"
-                      value={form.values.name}
-                      onChange={(event) => form.setFieldValue("name", event.currentTarget.value)}
-                      error={form.errors.name}
-                    />
-                  </Stack>
-
-                  <Stack gap="0">
-                    <Text mb="sm">Services activés :</Text>
-
-                    <Group justify="space-between">
-                      <Group>
-                        <Text>Documentation</Text>
-                        <Switch checked={projectSwitch} onChange={(event) => setProjectSwitch(event.currentTarget.checked)} />
-                      </Group>
-                      <Button color="secondary" variant="transparent"><IconChevronRight /></Button>
-                    </Group>
-                    <Divider color="inverted" />
-
-                    <Group justify="space-between">
-                      <Group>
-                        <Text>Suivi de projet</Text>
-                        <Switch checked={projectSwitch} onChange={(event) => setProjectSwitch(event.currentTarget.checked)} />
-                      </Group>
-                      <Button color="secondary" variant="transparent"><IconChevronRight /></Button>
-                    </Group>
-                    <Divider color="inverted" />
-                  </Stack>
-
-                  <Group align="center" w="100%">
-                    <Button w="fit-content" mx="auto" onClick={handleUpload}>
-                      Enregistrer les modifications
-                    </Button>
-                  </Group>
-                </Stack>
-
-
-              </form>
               <Divider my="lg" size={1} color="secondary" style={{ flexGrow: "1" }} />
 
               <Group >
@@ -299,40 +372,7 @@ export default function ProjectEditCreate() {
                 <Button color="secondary" variant="transparent"><IconChevronRight /></Button>
               </Group>
 
-              <Stack px="xl" wrap={isLargeScreen ? "nowrap" : "wrap"}>
-                <Group>
 
-                  <FileInput
-                    w="50%"
-                    placeholder={selectedDirectory ? rootName : "Aucun répertoire choisi"}
-                    onChange={handleFileChange}
-                    rightSection={selectedDirectory ? <IconFileCheck color="green" /> : null}
-                    error={null}
-                    radius="xl"
-                    styles={{ input: { cursor: "pointer" } }}
-                    onClick={(event) => {
-                      event.preventDefault();
-                      fileInputRef.current.click();
-                    }}
-                  />
-                  {selectedDirectory ? (
-                    <Button w="fit-content" onClick={handleSave}>Enregister</Button>
-                  ) : (
-                    <Button variant="light" w="fit-content" px="5px" mr="0" onClick={handleChooseClick}><IconSearch /></Button>
-                  )}
-                  <Button variant="subtle" c="red" onClick={handleChooseClick}>
-                    Supprimer
-                  </Button>
-                </Group>
-
-                <pre>{content}</pre>
-                <Group align="center" w="100%">
-                  <Button w="fit-content" mx="auto" onClick={handleUpload}>
-                    Enregistrer les modifications
-                  </Button>
-                </Group>
-
-              </Stack>
               <Divider my="lg" size={1} color="secondary" style={{ flexGrow: "1" }} />
 
 
@@ -342,10 +382,8 @@ export default function ProjectEditCreate() {
                   Danger zone
                 </Text>
                 <Button color="secondary" variant="transparent"><IconChevronRight style={{ transform: "rotate(90deg)" }} /></Button>
-              </Group>
-              <Button color="red" variant="light" onClick={() => setOpenDeleteModal(true)}>
-                Supprimer le projet
-              </Button>
+              </Group> */}
+
             </Stack>
 
 

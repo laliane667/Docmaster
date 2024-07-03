@@ -1,0 +1,10 @@
+/* Page paramètres projet */
+
+.accordionControlClassnames {
+  border-bottom: none;
+  transition: border-bottom 0.3s ease;
+}
+
+.accordionControlClassnames.active {
+  border-bottom: solid 1px #fff;
+}
