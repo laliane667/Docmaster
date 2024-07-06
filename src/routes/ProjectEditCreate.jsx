@@ -43,15 +43,37 @@ export default function ProjectEditCreate() {
   };
 
   function printTree(node) {
-    console.log(node.name, node.type);
+    //console.log(node.name, node.type);
     if (node.type === 'folder' && node.children && node.children.length > 0) {
       node.children.forEach(child => printTree(child));
     }
   }
-  const [parents, setParents] = useState([]);
+
+
+  const [parents, setParents] = useState([{ name: '', type: 'folder', children: [] }]);
+
+  function findOrCreateParent(path, currentParent) {
+    const pathParts = path.split('/');
+    let parent = currentParent;
+    for (let i = 0; i < pathParts.length; i++) {
+      const part = pathParts[i];
+      if (part === '') continue;
+      let child = parent.children.find(c => c.name === part);
+      if (!child) {
+        child = { name: part, type: 'folder', children: [] };
+        parent.children.push(child);
+      }
+      parent = child;
+    }
+    return parent;
+  }
+  function getFileExtension(fileName) {
+    const dotIndex = fileName.lastIndexOf('.');
+    return dotIndex === -1 ? '' : fileName.slice(dotIndex + 1);
+  }
 
   function processFiles(files) {
-    setParents([]);
+    setParents([{ name: '', type: 'folder', children: [] }]);
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       if (file.webkitRelativePath) {
@@ -60,13 +82,13 @@ export default function ProjectEditCreate() {
         const folderName = pathParts.join('/');
 
         // Trouver ou créer le dossier parent
-        let parent = parents.find(p => p.name === folderName);
-        if (!parent) {
-          parent = { name: folderName, type: 'folder', children: [] };
-          parents.push(parent);
-        }
+        let parent = findOrCreateParent(folderName, parents[0]);
 
-        if (file.type === '') {
+        // Déterminer le type du fichier en fonction de son extension
+        const extension = getFileExtension(fileName);
+        const type = extension === '' ? 'folder' : 'file';
+
+        if (type === 'folder') {
           parent.children.push({ name: fileName, type: 'folder', children: [] });
         } else {
           parent.children.push({ name: fileName, type: 'file' });
@@ -79,10 +101,12 @@ export default function ProjectEditCreate() {
   const handleFileChange = (event) => {
     const files = event.target.files;
     processFiles(files);
-    printTree(parents)
-    launchTreeGeneration(parents);
+    printTree(parents[0].children)
+    //console.log(parents[0].children)
+    launchTreeGeneration(parents[0].children);
     setSelectedDirectory(files);
   };
+
 
 
   const handleSave = async () => {
@@ -137,7 +161,7 @@ export default function ProjectEditCreate() {
         } else {
           clearInterval(intervalId);
         }
-      }, 75);
+      }, 0);//75);
 
       const displayContent = () => {
 
@@ -174,8 +198,8 @@ export default function ProjectEditCreate() {
   const generateTreeElement = (item, level = 0) => {
     const uniqueValue = generateUniqueId();
 
-    console.log("Id: " + uniqueValue)
-    console.log("Item childrens: " + item.children)
+    /* console.log("Id: " + uniqueValue)
+    console.log("Item childrens: " + item.children) */
     const indentation = <Text mt="3px" ml={rem(level * 15)}>{level > 0 ? "   " : "       "}</Text>;
     const indentValue = level + '0px';
     if (item.type === "file") {
@@ -209,7 +233,7 @@ export default function ProjectEditCreate() {
 
   const launchTreeGeneration = (contentToDisplay) => {
     // ... code pour gérer l'upload du répertoire ...
-    console.log(contentToDisplay)
+    //console.log(contentToDisplay)
     // Contenu à afficher (vous devriez générer cela dynamiquement en fonction du répertoire uploadé)
     const contentToDisplay2 = [
       {
@@ -240,7 +264,7 @@ export default function ProjectEditCreate() {
       },
     ];
 
-    console.log(contentToDisplay2)
+    //console.log(contentToDisplay2)
     // Effacer le contenu précédent
     setContent([]);
     let index = 0;
@@ -254,7 +278,7 @@ export default function ProjectEditCreate() {
       } else {
         clearInterval(intervalId);
       }
-    }, 350);
+    }, 0);//350);
   };
 
   const { project, projectId } = useLoaderData()
