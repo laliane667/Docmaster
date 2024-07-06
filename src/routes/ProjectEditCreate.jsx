@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 
 import { Card, Title, rem, Divider, Center, Image, Badge } from "@mantine/core";
 import { TextInput, Text, Paper, Group, Button, Switch, Stack, Accordion, Flex, Box, FileInput, NumberInput, Modal } from "@mantine/core"
-import { IconFileCheck, IconFileUpload, IconEdit, IconCalendar, IconTrendingUp, IconChevronRight, IconSearch } from "@tabler/icons-react";
+import { IconFileCheck, IconFileUpload, IconEdit, IconCalendar, IconPlus, IconChevronRight, IconSearch } from "@tabler/icons-react";
 
 import { DatePickerInput } from "@mantine/dates"
 import { useForm } from "@mantine/form"
@@ -20,7 +20,7 @@ import { useRef } from "react";
 import { useMediaQuery } from "react-responsive";
 
 import gitHub from "../assets/typeImage/github.png"
-import styles from '../css/ProjectEditCreate.module.css';
+import classes from '../css/ProjectEditCreate.module.css';
 
 export async function loaderCreateEditProject(params) {
   let project = null
@@ -42,14 +42,48 @@ export default function ProjectEditCreate() {
     fileInputRef.current.click();
   };
 
+  function printTree(node) {
+    console.log(node.name, node.type);
+    if (node.type === 'folder' && node.children && node.children.length > 0) {
+      node.children.forEach(child => printTree(child));
+    }
+  }
+  const [parents, setParents] = useState([]);
+
+  function processFiles(files) {
+    setParents([]);
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (file.webkitRelativePath) {
+        const pathParts = file.webkitRelativePath.split('/');
+        const fileName = pathParts.pop();
+        const folderName = pathParts.join('/');
+
+        // Trouver ou créer le dossier parent
+        let parent = parents.find(p => p.name === folderName);
+        if (!parent) {
+          parent = { name: folderName, type: 'folder', children: [] };
+          parents.push(parent);
+        }
+
+        if (file.type === '') {
+          parent.children.push({ name: fileName, type: 'folder', children: [] });
+        } else {
+          parent.children.push({ name: fileName, type: 'file' });
+        }
+      }
+    }
+    setParents(parents);
+  }
+
   const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    const directoryPath = file.webkitRelativePath || file.name;
-    const directoryName = directoryPath.split("/")[0];
-    setRootName(directoryName)
-    //console.log("Updated directory : " + directoryName);
-    setSelectedDirectory(event.target.files)
+    const files = event.target.files;
+    processFiles(files);
+    printTree(parents)
+    launchTreeGeneration(parents);
+    setSelectedDirectory(files);
   };
+
 
   const handleSave = async () => {
     await handleFileSubmit();
@@ -68,9 +102,12 @@ export default function ProjectEditCreate() {
 
     if (project._id) {
       const response = await fileUpload("/project/upload", {}, formData);
+      console.log("Project upload")
+      if (response) {
+        console.log("Response received :")
+        console.log(response)
+      }
     }
-    localStorage.setItem("fileAdded", true); // Stocke un état temporaire dans localStorage
-    window.location.assign(window.location.pathname); // Recharge la page actuelle
   };
 
 
@@ -83,78 +120,136 @@ export default function ProjectEditCreate() {
     { minDeviceWidth: 1000 }
   )
 
-  function Summary({ name }) {
+
+  function Summary({ name, ml }) {
     const [summaryContent, setSummaryContent] = useState("");
 
     useEffect(() => {
       let index = 0;
       const intervalId = setInterval(() => {
-        if (index < name.length - 1) {
-          setSummaryContent((prevContent) => prevContent + name[index]);
-          index++;
-          requestAnimationFrame(displayContent);
+        if (index < name.length) {
+          setSummaryContent((prevContent) => {
+            const newContent = prevContent + name[index];
+            index++;
+            requestAnimationFrame(displayContent);
+            return newContent;
+          });
         } else {
           clearInterval(intervalId);
         }
-      }, 50);
+      }, 75);
 
       const displayContent = () => {
 
       };
-
-      requestAnimationFrame(displayContent);
     }, [name]);
 
-    return <summary> {summaryContent}</summary>;
+
+    return <summary style={{ marginLeft: ml }}> {summaryContent}</summary>;
+  }
+
+  let nonNamedFileCount = 0;
+  let nonNamedFolderCount = 0;
+  function generateUniqueValue(item, parentValue = "") {
+    if (item.type === "file") {
+      if (item.name != '') {
+        nonNamedFileCount++;
+      }
+      return parentValue + (item.name != '' ? item.name : "nn" + nonNamedFileCount);
+    }
+
+    if (item.name != '') {
+      nonNamedFolderCount++;
+    }
+    return parentValue + (item.name != '' ? item.name : "nn" + nonNamedFolderCount);
+  }
+
+  let uniqueCount = 0;
+  function generateUniqueId() {
+    uniqueCount++;
+    return Date.now().toString(36) + Math.random().toString(36).substr(2) + uniqueCount;
   }
 
 
+  const generateTreeElement = (item, level = 0) => {
+    const uniqueValue = generateUniqueId();
+
+    console.log("Id: " + uniqueValue)
+    console.log("Item childrens: " + item.children)
+    const indentation = <Text mt="3px" ml={rem(level * 15)}>{level > 0 ? "   " : "       "}</Text>;
+    const indentValue = level + '0px';
+    if (item.type === "file") {
+      return (
+        <Group key={uniqueValue} bg="inverted" w="fit-content" mt="3px" mb="2px" style={{ borderRadius: "0.5rem", alignItems: "flex-start" }}>
+          {indentation}
+          <Summary name={item.name} />
+        </Group>
+      );
+    }
+
+    return (
+      <Accordion.Item key={uniqueValue} value={uniqueValue} ml={indentValue}>
+        <Accordion.Control >
+          {indentation}
+          <Summary name={(item.name && item.name != '') ? item.name : "No name"} />
+        </Accordion.Control>
+        {(item.children && item.children.length > 0) && (
+          <Accordion.Panel>
+            <ul>
+              {item.children.map((child) => generateTreeElement(child, level + 1))}
+            </ul>
+          </Accordion.Panel>
+        )}
+      </Accordion.Item>
+    );
+  };
 
 
-  const handleUpload = () => {
+
+
+  const launchTreeGeneration = (contentToDisplay) => {
     // ... code pour gérer l'upload du répertoire ...
-
+    console.log(contentToDisplay)
     // Contenu à afficher (vous devriez générer cela dynamiquement en fonction du répertoire uploadé)
-    const contentToDisplay = [
+    const contentToDisplay2 = [
       {
         name: 'minecraft',
-        children: ['launch_server.sh', 'start.sh', 'test'],
-      },
-      {
-        name: 'test',
-        children: ['ok.sh', 'super.sh'],
+        type: 'folder',
+        children: [
+          {
+            name: 'src',
+            type: 'folder',
+            children: [
+              { name: 'launch_server.sh', type: 'file' },
+              { name: 'start.sh', type: 'file' },
+            ]
+          },
+          { name: 'start.sh', type: 'file' },
+        ],
       },
       {
         name: 'sensors',
-        children: ['get-temperatures.sh', 'nohup.out', 'start.sh', 'temperatures.txt'],
+        type: 'folder',
+        children: [
+          { name: 'get-temperatures.sh', type: 'file' },
+          { name: 'nohup.out', type: 'file' },
+          { name: 'start.sh', type: 'file' },
+          { name: 'temperatures.txt', type: 'file' },
+          { name: 'Test', type: 'folder', children: [] },
+        ],
       },
     ];
 
+    console.log(contentToDisplay2)
     // Effacer le contenu précédent
     setContent([]);
-
-    // Afficher le nouveau contenu progressivement
     let index = 0;
     const intervalId = setInterval(() => {
       if (index < contentToDisplay.length) {
-        const folder = contentToDisplay[index];
+        const item = contentToDisplay[index];
 
-        const folderElement = (
-          <Group bg="inverted" w="fit-content" mb="2px" style={{ borderRadius: "0.5rem", alignItems: "flex-start" }}>
-            <Text mt="3px" ml="0.5rem">49</Text>
-            <details key={folder.name}>
-              <Summary name={folder.name} />
-              <ul>
-                {folder.children.map((child) => (
-                  <li key={child}>{child}</li>
-                ))}
-              </ul>
-            </details>
-            {/* <Button variant="subtle" onClick={() => handleCancel()}>Ignorer</Button> */}
-          </Group>
-
-        );
-        setContent((prevContent) => [...prevContent, folderElement]);
+        const itemElement = generateTreeElement(item);
+        setContent((prevContent) => [...prevContent, itemElement]);
         index++;
       } else {
         clearInterval(intervalId);
@@ -168,6 +263,9 @@ export default function ProjectEditCreate() {
   const user = useUser()
   const nextRenderNavigate = useNextRenderNavigate()
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
+
+  const accordion = React.useRef(null);
+  const treeAccordion = React.useRef(null);
 
   const form = useForm({
     initialValues: {
@@ -240,15 +338,14 @@ export default function ProjectEditCreate() {
           <Tabs.Panel value="settings">
             <input onChange={handleFileChange} style={{ opacity: '0', height: '0', width: "0" }} ref={fileInputRef} directory="" webkitdirectory="" type="file" />
             <Stack maw={isLargeScreen ? "100%" : "55vw"} px="xs" >
-              <Accordion defaultValue="general">
+              <Accordion
+                ref={accordion}
+                defaultValue="general"
+                classNames={{ chevron: classes.chevron }}
+                chevron={<IconPlus className={classes.icon} />}
+              >
                 <Accordion.Item value="general">
-                  <Accordion.Control
-                    className={`${styles.accordionControlClassnames} ${accordion.getValue() === "general" ? styles.active : ""
-                      }`}
-                  >
-
-
-
+                  <Accordion.Control>
                     <Text style={{ width: "fit-content" }}>Général</Text>
                   </Accordion.Control>
                   <Accordion.Panel>
@@ -265,6 +362,40 @@ export default function ProjectEditCreate() {
                             error={form.errors.name}
                           />
                         </Stack>
+
+                        <Group>
+
+                          <FileInput
+                            w="50%"
+                            placeholder={selectedDirectory ? rootName : "Aucun répertoire choisi"}
+                            onChange={handleFileChange}
+                            rightSection={selectedDirectory ? <IconFileCheck color="green" /> : null}
+                            error={null}
+                            radius="xl"
+                            styles={{ input: { cursor: "pointer" } }}
+                            onClick={(event) => {
+                              event.preventDefault();
+                              fileInputRef.current.click();
+                            }}
+                          />
+                          {selectedDirectory ? (
+                            <Button w="fit-content" onClick={handleSave}>Enregister</Button>
+                          ) : (
+                            <Button variant="light" w="fit-content" px="5px" mr="0" onClick={handleChooseClick}><IconSearch /></Button>
+                          )}
+                          <Button variant="subtle" c="red" onClick={handleChooseClick}>
+                            Supprimer
+                          </Button>
+                        </Group>
+
+                        <Accordion
+                          multiple
+                          ref={treeAccordion}
+                          variant="contained" radius="md" chevronPosition="left"
+                          classNames={{ item: classes.item, content: classes.content, control: classes.control }}
+                        >
+                          {content}
+                        </Accordion>
 
                         <Stack gap="0">
                           <Text mb="sm">Services activés :</Text>
@@ -288,8 +419,11 @@ export default function ProjectEditCreate() {
                           <Divider color="inverted" />
                         </Stack>
 
+
+
+                        {/* <pre>{content}</pre> */}
                         <Group align="center" w="100%">
-                          <Button w="fit-content" mx="auto" onClick={handleUpload}>
+                          <Button w="fit-content" mx="auto">
                             Enregistrer les modifications
                           </Button>
                         </Group>
@@ -300,47 +434,17 @@ export default function ProjectEditCreate() {
                   </Accordion.Panel>
                 </Accordion.Item>
 
-                <Accordion.Item value="location">
+                {/* <Accordion.Item value="location">
                   <Accordion.Control>
                     Emplacement du projet
                   </Accordion.Control>
                   <Accordion.Panel>
                     <Stack px="xl" wrap={isLargeScreen ? "nowrap" : "wrap"}>
-                      <Group>
 
-                        <FileInput
-                          w="50%"
-                          placeholder={selectedDirectory ? rootName : "Aucun répertoire choisi"}
-                          onChange={handleFileChange}
-                          rightSection={selectedDirectory ? <IconFileCheck color="green" /> : null}
-                          error={null}
-                          radius="xl"
-                          styles={{ input: { cursor: "pointer" } }}
-                          onClick={(event) => {
-                            event.preventDefault();
-                            fileInputRef.current.click();
-                          }}
-                        />
-                        {selectedDirectory ? (
-                          <Button w="fit-content" onClick={handleSave}>Enregister</Button>
-                        ) : (
-                          <Button variant="light" w="fit-content" px="5px" mr="0" onClick={handleChooseClick}><IconSearch /></Button>
-                        )}
-                        <Button variant="subtle" c="red" onClick={handleChooseClick}>
-                          Supprimer
-                        </Button>
-                      </Group>
-
-                      <pre>{content}</pre>
-                      <Group align="center" w="100%">
-                        <Button w="fit-content" mx="auto" onClick={handleUpload}>
-                          Enregistrer les modifications
-                        </Button>
-                      </Group>
 
                     </Stack>
                   </Accordion.Panel>
-                </Accordion.Item>
+                </Accordion.Item> */}
 
                 <Accordion.Item value="danger">
                   <Accordion.Control>

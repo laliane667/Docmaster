@@ -8,3 +8,33 @@
 .accordionControlClassnames.active {
   border-bottom: solid 1px #fff;
 }
+
+.chevron {
+  &[data-rotate] {
+    transform: rotate(45deg);
+  }
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+}
+
+.content {
+  margin: 0 0 5px 0;
+  padding: 0;
+  /* background-color: rgb(7, 7, 131); */
+}
+.item {
+  margin: 0;
+  /* margin-bottom: 5px; */
+  padding: 0;
+  /* background-color: rgb(131, 125, 7); */
+}
+.control > span {
+  margin: 0 5px;
+  padding: 3px 0;
+  max-height: fit-content;
+  /* background-color: brown; */
+}
+
