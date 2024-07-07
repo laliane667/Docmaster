@@ -23,13 +23,17 @@
 .content {
   margin: 0 0 5px 0;
   padding: 0;
-  /* background-color: rgb(7, 7, 131); */
 }
+
+summary {
+  background-color: rgba(0, 0, 0, 0);
+}
+
 .item {
   margin: 0;
   /* margin-bottom: 5px; */
   padding: 0;
-  /* background-color: rgb(131, 125, 7); */
+  background-color: rgba(0, 0, 0, 0);
 }
 .control > span {
   margin: 0 5px;

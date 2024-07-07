@@ -71,6 +71,33 @@ export default function ProjectEditCreate() {
     const dotIndex = fileName.lastIndexOf('.');
     return dotIndex === -1 ? '' : fileName.slice(dotIndex + 1);
   }
+  /* 
+    function processFiles(files) {
+      setParents([{ name: '', type: 'folder', children: [] }]);
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (file.webkitRelativePath) {
+          const pathParts = file.webkitRelativePath.split('/');
+          const fileName = pathParts.pop();
+          const folderName = pathParts.join('/');
+  
+          // Trouver ou créer le dossier parent
+          let parent = findOrCreateParent(folderName, parents[0]);
+  
+          // Déterminer le type du fichier en fonction de son extension
+          const extension = getFileExtension(fileName);
+          const type = extension === '' ? 'folder' : 'file';
+  
+          if (type === 'folder') {
+            parent.children.push({ name: fileName, type: 'folder', children: [] });
+          } else {
+            parent.children.push({ name: fileName, type: 'file' });
+          }
+        }
+      }
+      setParents(parents);
+    }
+   */
 
   function processFiles(files) {
     setParents([{ name: '', type: 'folder', children: [] }]);
@@ -91,20 +118,30 @@ export default function ProjectEditCreate() {
         if (type === 'folder') {
           parent.children.push({ name: fileName, type: 'folder', children: [] });
         } else {
-          parent.children.push({ name: fileName, type: 'file' });
+          const isTextFile = isFileTextBased(file); // Vérifier si le fichier est de type texte
+          parent.children.push({ name: fileName, type: 'file', text: isTextFile });
         }
       }
     }
     setParents(parents);
   }
 
+  function isFileTextBased(file) {
+    const textBasedExtensions = ['txt', 'js', 'json', 'css', 'html', 'md', 'csv', 'xml', 'yaml', 'log', 'java', 'cpp', 'cs']; // Ajouter les extensions de fichiers texte ici
+    const extension = getFileExtension(file.name);
+    return textBasedExtensions.includes(extension);
+  }
+
   const handleFileChange = (event) => {
     const files = event.target.files;
     processFiles(files);
-    printTree(parents[0].children)
+    printTree(parents[0].children) //Cet élément json est le répertoire chargé mais pas upload
     //console.log(parents[0].children)
     launchTreeGeneration(parents[0].children);
     setSelectedDirectory(files);
+
+    const originalFolderName = files[0].webkitRelativePath.split('/')[0];
+    setRootName(originalFolderName);
   };
 
 
@@ -117,6 +154,14 @@ export default function ProjectEditCreate() {
     const formData = new FormData();
     formData.append("id", project._id);
 
+    // Vérifier que rootName est une chaîne de caractères
+    let rootNameString = rootName;
+    if (Array.isArray(rootName)) {
+      rootNameString = rootName.join('');
+    }
+
+    // Ajouter le nom original du dossier parent au formulaire
+    formData.append("originalFolderName", rootNameString);
     // Ajoutez les fichiers à formData avec leur chemin d'accès relatif
     for (let i = 0; i < selectedDirectory.length; i++) {
       const file = selectedDirectory[i];
@@ -135,15 +180,11 @@ export default function ProjectEditCreate() {
   };
 
 
-
-
   //Tree
-
   const [content, setContent] = useState("");
   const isLargeScreen = useMediaQuery(
     { minDeviceWidth: 1000 }
   )
-
 
   function Summary({ name, ml }) {
     const [summaryContent, setSummaryContent] = useState("");
@@ -161,7 +202,7 @@ export default function ProjectEditCreate() {
         } else {
           clearInterval(intervalId);
         }
-      }, 0);//75);
+      }, 50);
 
       const displayContent = () => {
 
@@ -172,40 +213,18 @@ export default function ProjectEditCreate() {
     return <summary style={{ marginLeft: ml }}> {summaryContent}</summary>;
   }
 
-  let nonNamedFileCount = 0;
-  let nonNamedFolderCount = 0;
-  function generateUniqueValue(item, parentValue = "") {
-    if (item.type === "file") {
-      if (item.name != '') {
-        nonNamedFileCount++;
-      }
-      return parentValue + (item.name != '' ? item.name : "nn" + nonNamedFileCount);
-    }
-
-    if (item.name != '') {
-      nonNamedFolderCount++;
-    }
-    return parentValue + (item.name != '' ? item.name : "nn" + nonNamedFolderCount);
-  }
-
   let uniqueCount = 0;
   function generateUniqueId() {
     uniqueCount++;
     return Date.now().toString(36) + Math.random().toString(36).substr(2) + uniqueCount;
   }
 
-
   const generateTreeElement = (item, level = 0) => {
     const uniqueValue = generateUniqueId();
-
-    /* console.log("Id: " + uniqueValue)
-    console.log("Item childrens: " + item.children) */
-    const indentation = <Text mt="3px" ml={rem(level * 15)}>{level > 0 ? "   " : "       "}</Text>;
     const indentValue = level + '0px';
     if (item.type === "file") {
       return (
-        <Group key={uniqueValue} bg="inverted" w="fit-content" mt="3px" mb="2px" style={{ borderRadius: "0.5rem", alignItems: "flex-start" }}>
-          {indentation}
+        <Group bg={item.text ? "inverted" : "red"} key={uniqueValue} ml={indentValue} px="sm" w="fit-content" mt="3px" mb="2px" style={{ borderRadius: "0.5rem", alignItems: "flex-start" }}>
           <Summary name={item.name} />
         </Group>
       );
@@ -214,7 +233,6 @@ export default function ProjectEditCreate() {
     return (
       <Accordion.Item key={uniqueValue} value={uniqueValue} ml={indentValue}>
         <Accordion.Control >
-          {indentation}
           <Summary name={(item.name && item.name != '') ? item.name : "No name"} />
         </Accordion.Control>
         {(item.children && item.children.length > 0) && (
@@ -233,7 +251,7 @@ export default function ProjectEditCreate() {
 
   const launchTreeGeneration = (contentToDisplay) => {
     // ... code pour gérer l'upload du répertoire ...
-    //console.log(contentToDisplay)
+    console.log(contentToDisplay)
     // Contenu à afficher (vous devriez générer cela dynamiquement en fonction du répertoire uploadé)
     const contentToDisplay2 = [
       {
@@ -278,7 +296,7 @@ export default function ProjectEditCreate() {
       } else {
         clearInterval(intervalId);
       }
-    }, 0);//350);
+    }, 350);
   };
 
   const { project, projectId } = useLoaderData()
@@ -294,6 +312,7 @@ export default function ProjectEditCreate() {
   const form = useForm({
     initialValues: {
       name: project?.name || "",
+      rootOriginalName: project?.rootOriginalName || "",
       description: project?.description || "",
     },
 
@@ -376,8 +395,8 @@ export default function ProjectEditCreate() {
                     <form onSubmit={form.onSubmit(() => handleSubmit())}>
                       <Stack px="xl" py="md" gap="xl">
 
-                        <Stack gap="0">
-                          <Text mb="sm">Nom du projet :</Text>
+                        <Group>
+                          <Text>Nom du projet :</Text>
                           <TextInput
                             w="50%"
                             placeholder="Nom"
@@ -385,13 +404,14 @@ export default function ProjectEditCreate() {
                             onChange={(event) => form.setFieldValue("name", event.currentTarget.value)}
                             error={form.errors.name}
                           />
-                        </Stack>
+                        </Group>
 
                         <Group>
 
+                          <Text>Répertoire du projet :</Text>
                           <FileInput
                             w="50%"
-                            placeholder={selectedDirectory ? rootName : "Aucun répertoire choisi"}
+                            placeholder={form.values.rootOriginalName ? form.values.rootOriginalName : (selectedDirectory ? rootName : "Aucun répertoire choisi")}
                             onChange={handleFileChange}
                             rightSection={selectedDirectory ? <IconFileCheck color="green" /> : null}
                             error={null}
@@ -407,9 +427,9 @@ export default function ProjectEditCreate() {
                           ) : (
                             <Button variant="light" w="fit-content" px="5px" mr="0" onClick={handleChooseClick}><IconSearch /></Button>
                           )}
-                          <Button variant="subtle" c="red" onClick={handleChooseClick}>
+                          {/* <Button variant="subtle" c="red" onClick={handleChooseClick}>
                             Supprimer
-                          </Button>
+                          </Button> */}
                         </Group>
 
                         <Accordion
@@ -481,37 +501,6 @@ export default function ProjectEditCreate() {
                   </Accordion.Panel>
                 </Accordion.Item>
               </Accordion>
-
-
-              {/* 
-              <Group >
-                <Text size="lg" fw={500}>
-                  Général
-                </Text>
-                <Button color="secondary" variant="transparent"><IconChevronRight style={{ transform: "rotate(90deg)" }} /></Button>
-              </Group>
-
-              <Divider my="lg" size={1} color="secondary" style={{ flexGrow: "1" }} />
-
-              <Group >
-                <Text size="lg" fw={500}>
-                  Emplacement du projet
-                </Text>
-                <Button color="secondary" variant="transparent"><IconChevronRight /></Button>
-              </Group>
-
-
-              <Divider my="lg" size={1} color="secondary" style={{ flexGrow: "1" }} />
-
-
-
-              <Group >
-                <Text size="lg" fw={500}>
-                  Danger zone
-                </Text>
-                <Button color="secondary" variant="transparent"><IconChevronRight style={{ transform: "rotate(90deg)" }} /></Button>
-              </Group> */}
-
             </Stack>
 
 
